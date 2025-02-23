@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movies</title>
+</head>
+<body>
+<ul>
+  <li th:each="movie : ${movies}">
+    <span th:text="${movie.title}"></span> -
+    <span th:text="${movie.genre}"></span>,
+    <span th:text="${movie.cast}"></span>
+    <span th:text="${movie.release_date}"></span>
+    <span th:text="${movie.category.name}"></span>
+  </li>
+</ul>
+</body>
+</html>

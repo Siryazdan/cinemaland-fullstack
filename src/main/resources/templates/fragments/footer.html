@@ -1,0 +1,17 @@
+<footer id="footer">
+    <div class="footer-content">
+        <p><strong>Contact Information:</strong></p>
+        <p><strong>Address:</strong> <span th:text="${address}">Graz, Österreich</span></p>
+        <p><strong>Email:</strong> <a href="mailto:{{email}}" th:text="${email}">armin@cinema.com</a></p>
+        <p><strong>Phone:</strong> <span th:text="${phone}">+43 20 30 40 50</span></p>
+
+        <div class="social-icons">
+            <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+    </div>
+</footer>

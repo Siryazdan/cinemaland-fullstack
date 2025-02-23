@@ -1,0 +1,16 @@
+<section id="categories">
+  <div class="section-headline">Categories</div>
+  <div class="lane">
+    <div class="lane-wrapper">
+      <ul class="category-list">
+
+        <li th:each="category : ${categories}">
+          <div class="category-item">
+            <img th:src="@{'/files/' + ${category.file != null ? category.file.id : 'default-image-id'}}" alt="">
+            <p th:text="${category.name}">Category Name</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
