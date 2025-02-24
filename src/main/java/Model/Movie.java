@@ -2,10 +2,10 @@ package Model;
 
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,12 +21,19 @@ public class Movie {
 
     private String title;
     private String genre;
-    private String Synopsis;
+
+    @Column(name = "synopsis", columnDefinition = "TEXT")
+    private String synopsis;
+
     private String director;
-    private String Cast;
+
+    private String cast;
 
     private double rating;
-    private LocalDateTime releaseDate;
+    private LocalDate releaseDate;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     public String getId() {
         return id;
@@ -53,11 +60,11 @@ public class Movie {
     }
 
     public String getSynopsis() {
-        return Synopsis;
+        return synopsis;
     }
 
     public void setSynopsis(String synopsis) {
-        Synopsis = synopsis;
+        this.synopsis = synopsis;
     }
 
     public String getDirector() {
@@ -69,11 +76,11 @@ public class Movie {
     }
 
     public String getCast() {
-        return Cast;
+        return cast;
     }
 
     public void setCast(String cast) {
-        Cast = cast;
+        this.cast = cast;
     }
 
     public double getRating() {
@@ -84,12 +91,20 @@ public class Movie {
         this.rating = rating;
     }
 
-    public LocalDateTime getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(LocalDateTime releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
 
