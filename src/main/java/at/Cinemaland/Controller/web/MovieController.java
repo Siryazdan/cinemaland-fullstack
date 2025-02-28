@@ -1,7 +1,7 @@
-package Controller.web;
+package at.Cinemaland.Controller.web;
 
-import Model.Movie;
-import Service.MovieService;
+import at.Cinemaland.Model.Movie;
+import at.Cinemaland.Service.MovieService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

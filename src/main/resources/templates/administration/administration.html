@@ -39,7 +39,7 @@
     <div class="mt-4">
         <h2>Manage Categories</h2>
         <div class="d-flex justify-content-end mb-2">
-            <a href="/administration/category/create" class="btn btn-success">Create New Category</a>
+            <a th:href="${'/administration/movie/create'}" class="btn btn-success">Create New Category</a>
         </div>
         <table class="table table-striped">
             <thead>
@@ -52,7 +52,8 @@
             <tr th:each="category : ${categories}">
                 <td th:text="${category.name}"></td>
                 <td>
-                    <a th:href="@{/administration/category/{id}/update(id=${category.id})}" class="btn btn-primary">Edit</a>
+                    <a th:href="@{/administration/category/{id}/update(id=${category.id})}"
+                       class="btn btn-primary">Edit</a>
                     <a th:href="@{/administration/category/{id}/delete(id=${category.id})}" class="btn btn-danger">Delete</a>
                 </td>
             </tr>

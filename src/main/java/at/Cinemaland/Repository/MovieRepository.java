@@ -1,6 +1,7 @@
-package Repository;
+package at.Cinemaland.Repository;
 
-import Model.Movie;
+
+import at.Cinemaland.Model.Movie;
 import org.springframework.stereotype.Repository;
 
 @Repository

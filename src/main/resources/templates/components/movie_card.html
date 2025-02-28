@@ -1,27 +1,23 @@
-<div class="category-item" th:fragment="card(movie)">
-    <img src="https://www.w3schools.com/w3images/fjords.jpg" alt="Comedy"/>
-    <p>Comedy</p>
-</div>
-</li>
-<li>
-    <div class="category-item">
-        <img src="https://www.w3schools.com/w3images/lights.jpg" alt="Horror"/>
-        <p>Horror</p>
-    </div>
-</li>
-<div class="movie-details" th:text="${movie?.name}">Interstellar
-    <div/>
+<div class="section-headline">All Movies</div>
+<ul>
 
-    <div class="movie-details">
-        <p><strong>Director:</strong> <span th:text="${movie.director}">Christopher Nolan</span></p>
-        <p><strong>Cast:</strong> <span
-                th:text="${movie.cast}">Matthew McConaughey, Anne Hathaway, Jessica Chastain</span></p>
-        <p><strong>Genre:</strong> <span th:text="${movie.genre}">Sci-Fi, Adventure</span></p>
-        <p><strong>Rating:</strong> <span th:text="${movie.rating}">8.6/10</span></p>
-        <p><strong>Synopsis:</strong> <span th:text="${movie.synopsis}">A team of explorers must travel beyond this galaxy to discover whether mankind has a future among the stars.</span>
-        </p>
-    </div>
+    <li class="movie-item" th:each="movie : ${movies}">
+        <div class="movie-card">
 
-</div>
+            <div class="movie-image">
+                <img th:src="@{${movie.image}}" alt="Movie Poster" class="movie-image"/>
+            </div>
+
+            <h3 th:text="${movie.name}">Interstellar</h3>
+
+            <div class="movie-details">
+                <p><strong>Director:</strong> <span th:text="${movie.director}">Christopher Nolan</span></p>
+                <p><strong>Cast:</strong> <span th:text="${movie.cast}">Matthew McConaughey, Anne Hathaway, Jessica Chastain</span></p>
+                <p><strong>Genre:</strong> <span th:text="${movie.genre}">Sci-Fi, Adventure</span></p>
+                <p><strong>Rating:</strong> <span th:text="${movie.rating}">8.6/10</span></p>
+                <p><strong>Synopsis:</strong> <span th:text="${movie.synopsis}">A team of explorers must travel beyond this galaxy to discover whether mankind has a future among the stars.</span></p>
+            </div>
+        </div>
+    </li>
 </ul>
 </section>

@@ -1,7 +1,7 @@
-package Service;
+package at.Cinemaland.Service;
 
-import Model.Movie;
-import Repository.MovieRepository;
+import at.Cinemaland.Model.Movie;
+import at.Cinemaland.Repository.MovieRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,12 +28,6 @@ public class MovieService {
     }
 
     public Movie updateMovie(String id, Movie movie) {
-
-        // Movie entity = movieRepository.findById(id).orElse(null);
-        //if (entity != null) {
-        //  movie.setId(id);
-        //movie.setActors(entity.getActors());
-
         return movieRepository.save(movie);
     }
 

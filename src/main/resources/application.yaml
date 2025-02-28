@@ -6,7 +6,10 @@ spring:
       max-request-size: 10MB
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/cinemaland?useSSL=false&serverTimezone=UTC  # Added SSL and timezone settings
+    spring:
+      flyway:
+        enabled=true:
+    url: jdbc:mysql://localhost:3306/cinemaland?useSSL=false&serverTimezone=UTC
     username: root
     password: Xhepeto.2356
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,6 +24,6 @@ spring:
       static-locations: classpath:/static/, file:./uploads/
 
 file:
-  upload-directory: './uploads/'  # Make sure the directory exists on your file system
+  upload-directory: './uploads/'
 
 debug: true
