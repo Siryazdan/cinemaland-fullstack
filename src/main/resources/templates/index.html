@@ -1,46 +1,35 @@
-<!doctype html>
-<html class="no-js" lang="">
+<!DOCTYPE html>
+<html lang="en" class="no-js">
 
 <head>
-    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cinema Website</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="Welcome to the best cinema website for movies, series, and animes!">
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        <head>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        </head>
+    <meta property="og:title" content="Cinema Website">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cinema.com">
+    <meta property="og:image" content="https://www.cinema.com/images/logo.png">
+    <meta property="og:image:alt" content="Cinema Logo">
 
-
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title></title>
-        <link rel="stylesheet" th:href="@{/css/style.css}">
-        <meta name="description" content="">
-
-        <meta property="og:title" content="">
-        <meta property="og:type" content="">
-        <meta property="og:url" content="">
-        <meta property="og:image" content="">
-        <meta property="og:image:alt" content="">
-
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="icon" href="/icon.svg" type="image/svg+xml">
-        <link rel="apple-touch-icon" href="icon.png">
-
-        <link rel="manifest" href="site.webmanifest">
-        <meta name="theme-color" content="#fafafa">
-    </head>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#fafafa">
+</head>
 
 <body>
 
 <header>
-    <div id="top" , class="Wrapper">
+    <div id="top" class="Wrapper">
     </div>
     <div>
-        <img src="https://www.cinema.de/themes/custom/cinema_www/images/logos/logo_240.png"><img/>
+        <img src="https://www.cinema.de/themes/custom/cinema_www/images/logos/logo_240.png" alt="Cinema Logo" />
     </div>
-    <p class = main.par>
-        Welcome to my Cinema webiste
-    </p>
+    <p class="main-par">Welcome to my Cinema website</p>
 
     <section id="login-signup">
         <div class="wrapper">
@@ -58,7 +47,7 @@
     <section id="language-selector">
         <div class="wrapper">
             <div id="lang-select">
-                <select>
+                <select th:value="${selectedLanguage}">
                     <option value="en">English</option>
                     <option value="es">Deutsch</option>
                     <option value="fr">فارسی</option>
@@ -70,19 +59,13 @@
 
     <div class="wrapper">
         <ul id="main-nav">
-            <li><a href="" class="active">
-                <object data=""></object>
-                Our suggestion</a></li>
-            <li><a href="">
-                <object data=""></object>
-                Best of the week</a></li>
-            <li><a href="">
-                <object data=""></object>
-                Actors of the week</a></li>
+            <li><a href="" th:classappend="${activeNav == 'suggestion' ? 'active' : ''}">Our suggestion</a></li>
+            <li><a href="" th:classappend="${activeNav == 'best-of-week' ? 'active' : ''}">Best of the week</a></li>
+            <li><a href="" th:classappend="${activeNav == 'actors-of-week' ? 'active' : ''}">Actors of the week</a></li>
         </ul>
     </div>
-
 </header>
+
 <main class="wrapper">
     <div class="content">
         <div id="filter">
@@ -90,103 +73,111 @@
             <p>Sorted by</p>
             <div class="input-group">
                 <label>
-                    <input type="radio" name="sort"> Best of the year
+                    <input type="radio" name="sort" th:checked="${sort == 'best-films'}"> Best films
                 </label>
                 <label>
-                    <input type="radio" name="sort"> Best of the month
+                    <input type="radio" name="sort" th:checked="${sort == 'best-series'}"> Best series
                 </label>
-
+                <label>
+                    <input type="radio" name="sort" th:checked="${sort == 'best-animes'}"> Best animes
+                </label>
             </div>
+
             <p>Offers</p>
             <div class="input-group">
                 <label>
-                    <input type="checkbox" name="free-delivery"> Free movies to watch
+                    <input type="checkbox" name="move-review" th:checked="${moveReview}"> Movies to review
                 </label>
                 <label>
-                    <input type="checkbox" name="accept-voucher"> Free series to watch
+                    <input type="checkbox" name="series-review" th:checked="${seriesReview}"> Series to review
                 </label>
                 <label>
-                    <input type="checkbox" name="offers"> Free animes to watch
+                    <input type="checkbox" name="animes-review" th:checked="${animesReview}"> Animes to review
                 </label>
             </div>
+
             <p>Categories</p>
             <div class="input-group">
                 <label>
-                    <input type="checkbox" > Action
+                    <input type="checkbox" th:checked="${categories.contains('action')}"> Action
                 </label>
                 <label>
-                    <input type="checkbox" > Horror
+                    <input type="checkbox" th:checked="${categories.contains('horror')}"> Horror
                 </label>
                 <label>
-                    <input type="checkbox" > Comedy
+                    <input type="checkbox" th:checked="${categories.contains('comedy')}"> Comedy
                 </label>
             </div>
         </div>
 
         <div id="image">
-            <img src="https://plus.unsplash.com/premium_photo-1710409625244-e9ed7e98f67b?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fG1vdmllfGVufDB8fDB8fHww" alt="Movie Poster" />
+            <img th:src="@{${moviePosterUrl}}" alt="Movie Poster">
         </div>
     </div>
 </main>
 
-<div id="content">
-    <div id="search">
-        <label for="search-input">
-        <span class="sr-only">
-          Search
-        </span>
-        </label>
-        <input type="text" id="search-input"
-               placeholder="Search for the movies">
-    </div>
-    <section id="categories">
-        <div class="section-headline">Categories</div>
-        <div class="lane">
-            <div class="lane-wrapper">
-                <ul class="category-list">
-                    <li>
-                        <div class="category-item">
-                            <img src="https://www.w3schools.com/w3images/fjords.jpg" alt="Comedy" />
-                            <p>Comedy</p>
-                        </div>
-                    </li>
-                    <li>
-
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <section id="movies">
-        <div class="section-headline">Featured Movie</div>
-        <div class="movie-card">
-            <div class="movie-image">
-
-                <img src="https://de.web.img3.acsta.net/c_300_300/pictures/14/09/24/12/08/158828.jpg" alt="Interstellar Movie Poster" />
-            </div>
-            <div class="movie-details">
-                <h2>Interstellar (2014)</h2>
-                <p><strong>Director:</strong> Christopher Nolan</p>
-                <p><strong>Cast:</strong> Matthew McConaughey, Anne Hathaway, Jessica Chastain</p>
-                <p><strong>Genre:</strong> Sci-Fi, Adventure</p>
-                <p><strong>Rating:</strong> 8.6/10</p>
-                <p><strong>Synopsis:</strong> A team of explorers must travel beyond this galaxy to discover whether mankind has a future among the stars.</p>
-            </div>
-        </div>
-    </section>
-
-
+<div id="search">
+    <label for="search-input">
+        <span class="sr-only">Search</span>
+    </label>
+    <input type="text" id="search-input" placeholder="Search movies or series" th:value="${searchQuery}">
 </div>
-</main>
-<footer id="footer">
+
+<section id="categories">
+    <div class="section-headline">Categories</div>
+    <div class="lane">
+        <div class="lane-wrapper">
+            <ul class="category-list">
+                <li th:each="category : ${categories}">
+                    <div class="category-item">
+                        <img th:src="@{${category.file}}" alt="Category Image">
+                        <p th:text="${category.name}"></p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section id="movies">
+    <div class="section-headline">All Movies</div>
+    <div class="card-wrapper">
+
+
+        <div class="movie-item" th:each="movie : ${movies}">
+            <div class="top"
+                 th:style="|background-image:
+         url('/files/${movie?.image != null ? movie.image.id : 'default-image-id'}')|">
+                <div class="right">
+                    <button class="heart">
+                        <object data="img/heart.svg"></object>
+                    </button>
+                    <span class="ad">Show</span>
+                </div>
+            </div>
+
+            <div class="bottom">
+                <div>
+                    <div class="title" th:text="${movie.title}"></div>
+                    <div class="rating">
+                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"></svg>
+                        <span th:text="${movie.rating}"></span> <span>(<span th:text="${movie.reviewsCount}"></span>+)</span>
+                    </div>
+                </div>
+                <div class="underline-category">
+                    <span th:text="${movie.category}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
     <div class="footer-content">
         <p><strong>Contact Information:</strong></p>
         <p><strong>Address:</strong> Graz, Österreich</p>
-        <p><strong>Email:</strong> <a href="mailto:contact@cinema.com">armin@cinema.com</a></p>
+        <p><strong>Email:</strong> <a href="mailto:armin@cinema.com">armin@cinema.com</a></p>
         <p><strong>Phone:</strong> +43 20 30 40 50</p>
-
 
         <div class="social-icons">
             <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
@@ -199,8 +190,5 @@
     </div>
 </footer>
 
-
-
 </body>
-
 </html>

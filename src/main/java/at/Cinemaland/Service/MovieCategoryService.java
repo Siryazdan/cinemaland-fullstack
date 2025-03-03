@@ -43,11 +43,10 @@ public class MovieCategoryService {
         if (category != null) {
             category.setName(name);
             return movieCategoryRepository.save(category);
-        } else {
-
-            return null;
         }
+        return null;
     }
+
 
 
     public void deleteCategory(String id) {

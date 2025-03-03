@@ -11,7 +11,6 @@ public class MovieCategory {
         this.name = name;
     }
     public MovieCategory() {
-
     }
     @Id
     private String id;

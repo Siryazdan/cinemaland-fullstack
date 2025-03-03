@@ -3,6 +3,8 @@ package at.Cinemaland.Model;
 
 import jakarta.persistence.*;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,13 +18,37 @@ public class Movie {
         this.id = UUID.randomUUID().toString();
     }
 
-    private String name;
+    private String Title;
     private String director;
     private String cast;
     private String genre;
     private String rating;
     private String synopsis;
-    private String image;
+
+
+    @ManyToOne
+    @JoinColumn(name = "movie_category_id", referencedColumnName = "id")
+    private MovieCategory category;
+
+    public MovieCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(MovieCategory category) {
+        this.category = category;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "id", referencedColumnName = "rel_id", insertable = false, updatable = false)
+    private FileData image;
+
+    public FileData getImage() {
+        return image;
+    }
+
+    public void setImage(FileData image) {
+        this.image = image;
+    }
 
     public String getId() {
         return id;
@@ -32,13 +58,6 @@ public class Movie {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getDirector() {
         return director;
@@ -80,11 +99,13 @@ public class Movie {
         this.synopsis = synopsis;
     }
 
-    public String getImage() {
-        return image;
+    public String getTitle() {
+        return Title;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setTitle(String title) {
+        Title = title;
     }
+
 }
+

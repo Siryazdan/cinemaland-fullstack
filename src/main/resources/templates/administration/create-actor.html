@@ -10,35 +10,40 @@
 <body>
 <div class="container">
     <h1 th:text="${actor != null ? 'Edit Actor' : 'Create Actor'}">Create Actor</h1>
-    <form th:action="${actor != null ? '/administration/actor/' + actor.id + '/update' : '/administration/actor/create'}"
-          method="post"
-          class="mt-4"
-          enctype="multipart/form-data"
-          th:object="${actor}">
+    <form
+            th:action="${actor != null
+            ? '/administration/movie/' + movie.id + '/actor' + actor.id + '/update'
+            : '/administration/movie/' + movie.id + '/actor/create'}"
+            method="post"
+            class="mt-4"
+            enctype="multipart/form-data">
 
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
-            <input th:field="*{name}" type="text" class="form-control" id="name" name="name" required>
+            <input th:value="${actor?.name}"
+                   type="text" class="form-control" id="name" name="name" required>
         </div>
 
         <div class="mb-3">
             <label for="age" class="form-label">Age</label>
-            <input th:field="*{age}" type="number" class="form-control" id="age" name="age" required>
+            <input th:value="${actor?.age}"
+                   type="number" class="form-control" id="age" name="age" required>
         </div>
 
         <div class="mb-3">
             <label for="height" class="form-label">Height (in cm)</label>
-            <input th:field="*{height}" type="number" class="form-control" id="height" name="height" required>
+            <input th:value="${actor?.height}"
+                   type="number" class="form-control" id="height" name="height" required>
         </div>
 
         <div class="mb-3">
             <label for="file" class="form-label">Photo</label>
-            <input type="file" class="form-control" id="file" name="file" th:attr="required=${actor == null ? 'true' : null}">
+            <input type="file" class="form-control" id="file" name="file"
+                   th:required="${actor != null ? false : 'required'}">
         </div>
 
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>
-
 </body>
 </html>
