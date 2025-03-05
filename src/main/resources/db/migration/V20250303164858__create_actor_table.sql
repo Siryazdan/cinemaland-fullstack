@@ -1,0 +1,7 @@
+CREATE TABLE actor
+(
+    id     VARCHAR(50) PRIMARY KEY NOT NULL,
+    name   VARCHAR(255)            NOT NULL,
+    age    INT                     NOT NULL,
+    height INT                     NOT NULL
+);

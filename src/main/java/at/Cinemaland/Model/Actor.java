@@ -1,7 +1,6 @@
-package at.Cinemaland.Model;
+package at.cinemaland.Model;
 
 import jakarta.persistence.*;
-
 import java.util.UUID;
 
 @Entity
@@ -14,12 +13,12 @@ public class Actor {
     public void generateId() {
         this.id = UUID.randomUUID().toString();
     }
-    private String name;
-    private int age;
-    private int height;
 
-    @Column(name="movie_id")
-    private String movieId;
+    private String name;
+
+    private int age;
+
+    private int height;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id", referencedColumnName = "rel_id", insertable = false, updatable = false)
@@ -55,14 +54,6 @@ public class Actor {
 
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    public String getMovieId() {
-        return movieId;
-    }
-
-    public void setMovieId(String movieId) {
-        this.movieId = movieId;
     }
 
     public FileData getImage() {

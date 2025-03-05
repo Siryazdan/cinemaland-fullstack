@@ -1,4 +1,4 @@
-package at.Cinemaland.Model;
+package at.cinemaland.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,6 +29,7 @@ public class FileData {
 
     @Column(name = "rel_id")
     private String relId;
+
 
     public String getId() {
         return id;
