@@ -1,7 +1,8 @@
-package at.Cinemaland.Service;
+package at.cinemaland.Service;
 
-import at.Cinemaland.Model.MovieCategory;
-import at.Cinemaland.Repository.MovieCategoryRepository;
+import at.cinemaland.Model.MovieCategory;
+
+import at.cinemaland.Repository.MovieCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,16 +23,9 @@ public class MovieCategoryService {
         return movieCategoryRepository.findAll();
     }
 
-
-    public void create(MovieCategory category) {
-        movieCategoryRepository.save(category);
-    }
-
-
     public MovieCategory createCategory(MovieCategory category) {
         return movieCategoryRepository.save(category);
     }
-
 
     public MovieCategory getCategory(String id) {
         return movieCategoryRepository.findById(id).orElse(null);
@@ -46,7 +40,6 @@ public class MovieCategoryService {
         }
         return null;
     }
-
 
 
     public void deleteCategory(String id) {

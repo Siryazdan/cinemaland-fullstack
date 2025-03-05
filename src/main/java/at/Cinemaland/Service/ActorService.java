@@ -1,7 +1,7 @@
-package at.Cinemaland.Service;
+package at.cinemaland.Service;
 
-import at.Cinemaland.Model.Actor;
-import at.Cinemaland.Repository.ActorRepository;
+import at.cinemaland.Model.Actor;
+import at.cinemaland.Repository.ActorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,17 +22,23 @@ public class ActorService {
         return actorRepository.findById(id).orElse(null);
     }
 
-    public void createActor(Actor actor, String movieId, MultipartFile image) throws IOException {
-        actor.setMovieId(movieId);
+    public Actor createActor(Actor actor, MultipartFile image) throws IOException {
         Actor entity = actorRepository.save(actor);
         fileDataService.createFileData(image, entity.getId());
 
+        return entity;
     }
 
-    public Actor updateActor(String movieId, String ActorId, Actor actor) {
-        actor.setId(ActorId);
-        actor.setMovieId(movieId);
-        return actorRepository.save(actor);
+    public Actor updateActor(String actorId, Actor actor) {
+        Actor actorToUpdate = actorRepository.findById(actorId).orElse(null);
+        if (actorToUpdate != null) {
+            actorToUpdate.setName(actor.getName());
+            actorToUpdate.setAge(actor.getAge());
+            actorToUpdate.setHeight(actor.getHeight());
+
+            return actorRepository.save(actorToUpdate);
+        }
+        return null;
     }
 
     public void deleteActor(String id) {
@@ -40,13 +46,8 @@ public class ActorService {
         actorRepository.deleteById(id);
     }
 
-    public Actor createActor(Actor actor, String movieId) {
-        actor.setMovieId(movieId);
+    public Actor createActor(Actor actor) {
         return actorRepository.save(actor);
-    }
-
-    public Iterable<Actor> getMovieActors(String movieId) {
-        return actorRepository.findByMovieId(movieId);
     }
 
 }

@@ -1,4 +1,4 @@
-package at.Cinemaland;
+package at.cinemaland;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,8 +1,8 @@
-package at.Cinemaland.Service;
+package at.cinemaland.Service;
 
 
-import at.Cinemaland.Model.FileData;
-import at.Cinemaland.Repository.FileDataRepository;
+import at.cinemaland.Model.FileData;
+import at.cinemaland.Repository.FileDataRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

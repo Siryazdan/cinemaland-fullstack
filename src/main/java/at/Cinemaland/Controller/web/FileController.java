@@ -1,8 +1,7 @@
-package at.Cinemaland.Controller.web;
+package at.cinemaland.Controller.web;
 
-
-import at.Cinemaland.Model.FileData;
-import at.Cinemaland.Service.FileDataService;
+import at.cinemaland.Model.FileData;
+import at.cinemaland.Service.FileDataService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;

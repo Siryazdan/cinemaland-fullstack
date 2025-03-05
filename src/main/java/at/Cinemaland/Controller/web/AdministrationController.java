@@ -1,12 +1,13 @@
-package at.Cinemaland.Controller.web;
+package at.cinemaland.Controller.web;
 
-import at.Cinemaland.Model.Actor;
-import at.Cinemaland.Model.Movie;
-import at.Cinemaland.Model.MovieCategory;
-import at.Cinemaland.Service.ActorService;
-import at.Cinemaland.Service.FileDataService;
-import at.Cinemaland.Service.MovieCategoryService;
-import at.Cinemaland.Service.MovieService;
+
+import at.cinemaland.Model.Actor;
+import at.cinemaland.Model.Movie;
+import at.cinemaland.Model.MovieCategory;
+import at.cinemaland.Service.ActorService;
+import at.cinemaland.Service.FileDataService;
+import at.cinemaland.Service.MovieCategoryService;
+import at.cinemaland.Service.MovieService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/administration")
@@ -79,7 +81,7 @@ public class AdministrationController {
     @PostMapping("/category/create")
     public String createCategorySubmit(@RequestParam("name") String name, @RequestParam("file") MultipartFile file) throws IOException {
         MovieCategory category = new MovieCategory(name);
-        this.movieCategoryService.create(category);
+        this.movieCategoryService.createCategory(category);
 
         this.fileDataService.createFileData(file, category.getId());
 
@@ -108,9 +110,10 @@ public class AdministrationController {
     public String updateMovie(Model model, @PathVariable String id) {
 
         List<MovieCategory> categories = movieCategoryService.getCategories();
-        model.addAttribute("categories", categories);
+        Movie movie = movieService.getMovie(id);
 
-        model.addAttribute("movie", movieService.getMovie(id));
+        model.addAttribute("categories", categories);
+        model.addAttribute("movie", movie);
 
         return "administration/create-movie";
     }
@@ -130,6 +133,17 @@ public class AdministrationController {
     public String deleteMovie(@PathVariable String id) {
         movieService.deleteMovie(id);
         return "redirect:/administration";
+    }
+
+    @PostMapping("/movie/{movieId}/actor/create")
+    public String createActor(@PathVariable("movieId") String movieId, Actor actor, @RequestParam("file") MultipartFile file) throws IOException {
+
+        Actor entity = actorService.createActor(actor);
+        fileDataService.createFileData(file, entity.getId());
+
+        Movie movie = movieService.addActors(movieId, Set.of(entity.getId()));
+
+        return "redirect:/administration/movie/" + movieId + "/update";
     }
 
     @GetMapping("/movie/{movieId}/actor/create")
@@ -159,7 +173,7 @@ public class AdministrationController {
             Actor actor,
             @RequestParam("file") MultipartFile file) throws IOException {
 
-        Actor entity = actorService.updateActor(movieId, actorId, actor);
+        Actor entity = actorService.updateActor(actorId, actor);
         fileDataService.replaceOrUpdateFileData(file, entity.getId());
         return "redirect:/administration/movie/" + movieId + "/update";
     }
