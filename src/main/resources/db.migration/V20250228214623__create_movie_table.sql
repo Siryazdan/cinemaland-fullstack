@@ -7,4 +7,5 @@ CREATE TABLE movie (
                        rating DECIMAL(3, 1) NOT NULL,
                        synopsis TEXT
 
+
 );

@@ -27,7 +27,7 @@
     <div id="top" class="Wrapper">
     </div>
     <div>
-        <img src="https://www.cinema.de/themes/custom/cinema_www/images/logos/logo_240.png" alt="Cinema Logo" />
+        <img src="https://www.cinema.de/themes/custom/cinema_www/images/logos/logo_240.png" alt="Cinema Logo"/>
     </div>
     <p class="main-par">Welcome to my Cinema website</p>
 
@@ -111,7 +111,8 @@
         </div>
 
         <div id="image">
-            <img th:src="@{${moviePosterUrl}}" alt="Movie Poster">
+            <img src="https://plus.unsplash.com/premium_photo-1710409625244-e9ed7e98f67b?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fG1vdmllfGVufDB8fDB8fHww"
+                 alt="Movie Poster">
         </div>
     </div>
 </main>
@@ -130,7 +131,8 @@
             <ul class="category-list">
                 <li th:each="category : ${categories}">
                     <div class="category-item">
-                        <img th:src="@{${category.file}}" alt="Category Image">
+                        <img th:src="@{'/files/' + ${category.file != null ? category.file.id : 'default-image-id'}}"
+                             alt="">
                         <p th:text="${category.name}"></p>
                     </div>
                 </li>
@@ -148,12 +150,6 @@
             <div class="top"
                  th:style="|background-image:
          url('/files/${movie?.image != null ? movie.image.id : 'default-image-id'}')|">
-                <div class="right">
-                    <button class="heart">
-                        <object data="img/heart.svg"></object>
-                    </button>
-                    <span class="ad">Show</span>
-                </div>
             </div>
 
             <div class="bottom">
@@ -161,13 +157,21 @@
                     <div class="title" th:text="${movie.title}"></div>
                     <div class="rating">
                         <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"></svg>
-                        <span th:text="${movie.rating}"></span> <span>(<span th:text="${movie.reviewsCount}"></span>+)</span>
+                        <span th:text="${movie.rating}"></span> <span>(<span
+                            th:text="${movie.reviewsCount}"></span>+)</span>
                     </div>
                 </div>
                 <div class="underline-category">
                     <span th:text="${movie.category}"></span>
                 </div>
+
+                <div class="movie-details">
+                    <div><strong>Genre:</strong> <span th:text="${movie.genre}"></span></div>
+                    <div><strong>Director:</strong> <span th:text="${movie.director}"></span></div>
+                    <div><strong>Cast:</strong> <span th:text="${movie.cast}"></span></div>
+                </div>
             </div>
+        </div>
         </div>
     </div>
 </section>

@@ -370,17 +370,16 @@ footer .social-icons a:hover {
     color: #333;
 }
 
-.movie-item .bottom .movie-details {
-    margin-top: 12px;
-    font-size: 1rem;
+.movie-details {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    font-size: 14px;
     color: #666;
 }
 
-.movie-item .bottom .movie-details object {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    margin-left: 10px;
+.movie-details div {
+    margin-bottom: 5px;
 }
 
 
@@ -401,7 +400,7 @@ footer .social-icons a:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* Image in the middle of the website */
+
 #image img {
     width: 50%; /* Smaller image */
     max-width: 500px; /* Max width to avoid it becoming too large on big screens */

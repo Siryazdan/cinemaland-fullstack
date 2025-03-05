@@ -24,6 +24,8 @@ public class Movie {
     private String genre;
     private String rating;
     private String synopsis;
+    private int reviewsCount;
+
 
 
     @ManyToOne
@@ -32,6 +34,14 @@ public class Movie {
 
     public MovieCategory getCategory() {
         return category;
+    }
+
+    public int getReviewsCount() {
+        return reviewsCount;
+    }
+
+    public void setReviewsCount(int reviewsCount) {
+        this.reviewsCount = reviewsCount;
     }
 
     public void setCategory(MovieCategory category) {
