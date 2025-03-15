@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Movies in Category</title>
+    <link rel="stylesheet" th:href="@{/css/category-details.css}">
+</head>
+<body>
+<header>
+    <h1>Movies in Category: <span th:text="${categoryName}"></span></h1>
+</header>
+<main class="wrapper">
+    <div class="card-wrapper">
+        <div class="movie-item" th:each="movie : ${movies}">
+            <a th:href="@{'/movie/' + ${movie.id}}">
+                <div class="top" th:style="|background-image: url('/files/${movie?.image != null ? movie.image.id : 'default-image-id'}')|"></div>
+                <div class="bottom">
+                    <div>
+                        <div class="title" th:text="${movie.title}"></div>
+                        <div class="rating">
+                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"></svg>
+                            <span th:text="${movie.rating}"></span> <span>(<span th:text="${movie.reviewsCount}"></span>+)</span>
+                        </div>
+                    </div>
+                    <div class="underline-category">
+                        <span th:text="${movie.category != null ? movie.category.name : 'No Category'}"></span>
+                    </div>
+                    <div class="movie-details">
+                        <div><strong>Genre:</strong> <span th:text="${movie.genre}"></span></div>
+                        <div><strong>Director:</strong> <span th:text="${movie.director}"></span></div>
+                        <div><strong>Cast:</strong> <span th:text="${movie.cast}"></span></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

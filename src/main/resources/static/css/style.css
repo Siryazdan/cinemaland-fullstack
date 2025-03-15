@@ -1,4 +1,4 @@
-/* Base Styles */
+
 * {
     margin: 0;
     padding: 0;
@@ -13,7 +13,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Header Styles */
+
 header {
     background: linear-gradient(135deg, #ff6a00, #ff3f00);
     color: #fff;
@@ -47,7 +47,7 @@ header .main-par {
     100% { opacity: 1; }
 }
 
-/* Language Selector */
+
 #language-selector {
     margin-top: 20px;
     text-align: center;
@@ -82,7 +82,7 @@ header .main-par {
     color: #ff6600;
 }
 
-/* Navigation Links (Our Suggestion, Best of the Week, etc.) */
+
 #main-nav {
     margin-top: 40px;
     text-align: center;
@@ -114,7 +114,7 @@ header .main-par {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* Footer */
+
 footer {
     background-color: #ff6600;
     color: #fff;
@@ -143,7 +143,7 @@ footer .social-icons a:hover {
     color: #f1f1f1;
 }
 
-/* Search Bar */
+
 #search {
     position: relative;
     width: 80%;
@@ -184,7 +184,7 @@ footer .social-icons a:hover {
     pointer-events: none;
 }
 
-/* Filter Section */
+
 #filter {
     background-color: #fff;
     padding: 40px;
@@ -219,7 +219,7 @@ footer .social-icons a:hover {
     accent-color: #ff6600;
 }
 
-/* Categories Section */
+
 
 #categories {
     padding: 40px 20px;
@@ -241,7 +241,7 @@ footer .social-icons a:hover {
     font-weight: bold;
     color: #333;
     margin-bottom: 30px;
-    text-align: center; /* Ensures the "All Movies" title is centered */
+    text-align: center;
 }
 
 
@@ -250,14 +250,24 @@ footer .social-icons a:hover {
     justify-content: center;
     gap: 40px;
     flex-wrap: wrap;
+    margin-top: 20px;
 }
+
+
+a {
+    text-decoration: none;
+}
+
 
 .category-list {
     list-style: none;
     display: flex;
-    flex-direction: column;
     gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0;
 }
+
 
 .category-item {
     background-color: #fff;
@@ -266,15 +276,18 @@ footer .social-icons a:hover {
     text-align: center;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 150px;
-    max-width: 100%;
+    width: 150px;               /* Fixed width for category items */
+    max-width: 100%;            /* Prevent items from overflowing */
     cursor: pointer;
+    flex-shrink: 0;
 }
+
 
 .category-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
+
 
 .category-item img {
     width: 100%;
@@ -284,13 +297,28 @@ footer .social-icons a:hover {
     margin-bottom: 10px;
 }
 
+
 .category-item p {
     font-size: 1.1rem;
     color: #333;
     font-weight: 600;
 }
 
-/* Movie Cards */
+
+@media (max-width: 768px) {
+    .category-item {
+        flex-basis: calc(50% - 20px);
+    }
+}
+
+
+@media (max-width: 480px) {
+    .category-item {
+        flex-basis: 100%;
+    }
+}
+
+
 .card-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -298,7 +326,7 @@ footer .social-icons a:hover {
     margin-top: 50px;
     gap: 30px;
 }
-/* Movie Item */
+
 .movie-item {
     width: 280px;
     border-radius: 12px;
@@ -314,7 +342,7 @@ footer .social-icons a:hover {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* Top section - Movie Poster */
+
 .movie-item .top {
     background-size: cover;
     background-position: center;
@@ -322,7 +350,7 @@ footer .social-icons a:hover {
     position: relative;
 }
 
-/* Right section (Rating label) */
+
 .movie-item .top .right {
     position: absolute;
     top: 15px;
@@ -335,7 +363,7 @@ footer .social-icons a:hover {
     font-weight: bold;
 }
 
-/* Bottom section - Movie Title, Rating, and Category */
+
 .movie-item .bottom {
     padding: 20px;
     font-size: 0.9rem;
@@ -383,7 +411,7 @@ footer .social-icons a:hover {
 }
 
 
-/* Sign Up and Log In Buttons */
+
 #login-signup .auth-buttons .btn {
     background-color: #ff6600;
     border: none;
@@ -402,9 +430,9 @@ footer .social-icons a:hover {
 
 
 #image img {
-    width: 50%; /* Smaller image */
-    max-width: 500px; /* Max width to avoid it becoming too large on big screens */
-    height: auto; /* Maintain aspect ratio */
+    width: 50%;
+    max-width: 500px;
+    height: auto;
     border-radius: 10px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     margin: 0 auto;

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cinema Website</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <meta name="description" content="Welcome to the best cinema website for movies, series, and animes!">
 
     <meta property="og:title" content="Cinema Website">
@@ -47,23 +47,17 @@
     <section id="language-selector">
         <div class="wrapper">
             <div id="lang-select">
-                <select th:value="${selectedLanguage}">
-                    <option value="en">English</option>
-                    <option value="es">Deutsch</option>
-                    <option value="fr">فارسی</option>
-                </select>
+                <form action="" method="get">
+                    <select name="lang" onchange="this.form.submit()">
+                        <option value="en" th:selected="${#locale.language == 'en'}">English</option>
+                        <option value="de" th:selected="${#locale.language == 'de'}">Deutsch</option>
+                        <option value="fa" th:selected="${#locale.language == 'fa'}">فارسی</option>
+                    </select>
+                </form>
                 <i class="fas fa-globe-americas"></i>
             </div>
         </div>
     </section>
-
-    <div class="wrapper">
-        <ul id="main-nav">
-            <li><a href="" th:classappend="${activeNav == 'suggestion' ? 'active' : ''}">Our suggestion</a></li>
-            <li><a href="" th:classappend="${activeNav == 'best-of-week' ? 'active' : ''}">Best of the week</a></li>
-            <li><a href="" th:classappend="${activeNav == 'actors-of-week' ? 'active' : ''}">Actors of the week</a></li>
-        </ul>
-    </div>
 </header>
 
 <main class="wrapper">
@@ -99,13 +93,16 @@
             <p>Categories</p>
             <div class="input-group">
                 <label>
-                    <input type="checkbox" th:checked="${categories.contains('action')}"> Action
+                    <input type="checkbox" th:checked="${categories != null and categories.contains('action')}"> For
+                    fanatsy lovers
                 </label>
                 <label>
-                    <input type="checkbox" th:checked="${categories.contains('horror')}"> Horror
+                    <input type="checkbox" th:checked="${categories != null and categories.contains('horror')}"> Are you
+                    scared?
                 </label>
                 <label>
-                    <input type="checkbox" th:checked="${categories.contains('comedy')}"> Comedy
+                    <input type="checkbox" th:checked="${categories != null and categories.contains('comedy')}"> Happy
+                    and Funny
                 </label>
             </div>
         </div>
@@ -118,10 +115,13 @@
 </main>
 
 <div id="search">
-    <label for="search-input">
-        <span class="sr-only">Search</span>
-    </label>
-    <input type="text" id="search-input" placeholder="Search movies or series" th:value="${searchQuery}">
+    <form id="search-form" action="/search" method="get">
+        <label for="search-input">
+            <span class="sr-only"></span>
+        </label>
+        <input type="text" id="search-input" name="query" placeholder="Search movies or series"
+               th:value="${searchQuery}">
+    </form>
 </div>
 
 <section id="categories">
@@ -131,9 +131,11 @@
             <ul class="category-list">
                 <li th:each="category : ${categories}">
                     <div class="category-item">
-                        <img th:src="@{'/files/' + ${category.file != null ? category.file.id : 'default-image-id'}}"
-                             alt="">
-                        <p th:text="${category.name}"></p>
+                        <a th:href="@{'/category/' + ${category.name}}">
+                            <img th:src="@{'/files/' + ${category.file != null ? category.file.id : 'default-image-id'}}"
+                                 alt="">
+                            <p th:text="${category.name}"></p>
+                        </a>
                     </div>
                 </li>
             </ul>
@@ -147,31 +149,32 @@
 
 
         <div class="movie-item" th:each="movie : ${movies}">
-            <div class="top"
-                 th:style="|background-image:
+            <a th:href="@{'/movie/' + ${movie.id}}">
+                <div class="top"
+                     th:style="|background-image:
          url('/files/${movie?.image != null ? movie.image.id : 'default-image-id'}')|">
-            </div>
+                </div>
 
-            <div class="bottom">
-                <div>
-                    <div class="title" th:text="${movie.title}"></div>
-                    <div class="rating">
-                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"></svg>
-                        <span th:text="${movie.rating}"></span> <span>(<span
-                            th:text="${movie.reviewsCount}"></span>+)</span>
+                <div class="bottom">
+                    <div>
+                        <div class="title" th:text="${movie.title}"></div>
+                        <div class="rating">
+                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"></svg>
+                            <span th:text="${movie.rating}"></span> <span>(<span
+                                th:text="${movie.reviewsCount}"></span>+)</span>
+                        </div>
+                    </div>
+                    <div class="underline-category">
+                        <span th:text="${movie.category != null ? movie.category.name : 'No Category'}"></span>
+                    </div>
+
+                    <div class="movie-details">
+                        <div><strong>Genre:</strong> <span th:text="${movie.genre}"></span></div>
+                        <div><strong>Director:</strong> <span th:text="${movie.director}"></span></div>
+                        <div><strong>Cast:</strong> <span th:text="${movie.cast}"></span></div>
                     </div>
                 </div>
-                <div class="underline-category">
-                    <span th:text="${movie.category}"></span>
-                </div>
-
-                <div class="movie-details">
-                    <div><strong>Genre:</strong> <span th:text="${movie.genre}"></span></div>
-                    <div><strong>Director:</strong> <span th:text="${movie.director}"></span></div>
-                    <div><strong>Cast:</strong> <span th:text="${movie.cast}"></span></div>
-                </div>
-            </div>
-        </div>
+            </a>
         </div>
     </div>
 </section>

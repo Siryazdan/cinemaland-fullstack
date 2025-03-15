@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Movie Details</title>
+    <link rel="stylesheet" th:href="@{/css/movie-details.css}">
+</head>
+<body>
+<header>
+    <h1 th:text="${movie.title}">Movie Title</h1>
+</header>
+<main>
+    <div>
+        <img th:src="@{'/files/' + ${movie?.image != null ? movie.image.id : 'default-image-id'}}" alt="Movie Poster">
+    </div>
+    <div>
+        <p><strong>Genre:</strong> <span th:text="${movie.genre}"></span></p>
+        <p><strong>Category:</strong> <span th:text="${movie.category != null ? movie.category.name : 'No Category'}"></span></p>
+        <p><strong>Director:</strong> <span th:text="${movie.director}"></span></p>
+        <p><strong>Synopsis:</strong> <span th:text="${movie.synopsis}"></span></p>
+        <p><strong>Cast:</strong> <span th:text="${movie.cast}"></span></p>
+    </div>
+</main>
+<footer>
+    <a href="/">Back to Home</a>
+</footer>
+</body>
+</html>

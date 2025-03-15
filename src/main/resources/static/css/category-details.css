@@ -1,0 +1,112 @@
+/* category-details.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.wrapper {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.movie-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    width: calc(33.333% - 1rem);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.movie-item:hover {
+    transform: translateY(-5px);
+}
+
+.movie-item a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.movie-item .top {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
+.movie-item .bottom {
+    padding: 1rem;
+}
+
+.movie-item .title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.movie-item .rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.movie-item .rating svg {
+    fill: #f39c12;
+    margin-right: 0.25rem;
+}
+
+.movie-item .underline-category {
+    font-size: 0.875rem;
+    color: #888;
+    margin-bottom: 1rem;
+}
+
+.movie-item .movie-details {
+    font-size: 0.875rem;
+    color: #555;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+footer p, footer a {
+    margin: 0.5rem 0;
+    color: #fff;
+}
+
+footer .social-icons a {
+    margin: 0 0.5rem;
+    color: #fff;
+    font-size: 1.5rem;
+}

@@ -1,11 +1,12 @@
-package at.cinemaland.Service;
+package at.Cinemaland.Service;
 
-import at.cinemaland.Model.Actor;
-import at.cinemaland.Repository.ActorRepository;
+import at.Cinemaland.Model.Actor;
+import at.Cinemaland.Repository.ActorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class ActorService {
@@ -41,13 +42,16 @@ public class ActorService {
         return null;
     }
 
+    public Actor createActor(Actor actor) {
+        return actorRepository.save(actor);
+    }
+
     public void deleteActor(String id) {
         fileDataService.deleteFileByRelId(id);
         actorRepository.deleteById(id);
     }
-
-    public Actor createActor(Actor actor) {
-        return actorRepository.save(actor);
+    public List<Actor> getActors() {
+        return actorRepository.findAll();
     }
 
 }

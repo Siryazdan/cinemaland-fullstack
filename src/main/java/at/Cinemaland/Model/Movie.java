@@ -1,4 +1,4 @@
-package at.cinemaland.Model;
+package at.Cinemaland.Model;
 
 import jakarta.persistence.*;
 
@@ -47,6 +47,7 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
+
     private Set<Actor> actors;
 
     public String getId() {
@@ -71,6 +72,14 @@ public class Movie {
 
     public void setDirector(String director) {
         this.director = director;
+    }
+
+    public String getMovieCategoryId() {
+        return movieCategoryId;
+    }
+
+    public void setMovieCategoryId(String movieCategoryId) {
+        this.movieCategoryId = movieCategoryId;
     }
 
     public String getCast() {

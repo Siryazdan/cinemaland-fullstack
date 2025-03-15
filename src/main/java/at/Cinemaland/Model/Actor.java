@@ -1,4 +1,4 @@
-package at.cinemaland.Model;
+package at.Cinemaland.Model;
 
 import jakarta.persistence.*;
 import java.util.UUID;
@@ -39,6 +39,7 @@ public class Actor {
     public void setName(String name) {
         this.name = name;
     }
+
 
     public int getAge() {
         return age;

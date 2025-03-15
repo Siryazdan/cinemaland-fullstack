@@ -42,16 +42,14 @@
 
                 <div class="mb-3">
                     <label for="director" class="form-label">Director</label>
-                    <input th:value="${movie?.cast}"
-                           type="text" class="form-control" id="cast" name="cast"
-                           required>
+                    <input th:value="${movie?.director}"
+                           type="text" class="form-control" id="director" name="director" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="cast" class="form-label">Cast</label>
-                    <input th:value="${movie?.director}"
-                           type="text" class="form-control" id="director" name="director"
-                           required>
+                    <input th:value="${movie?.cast}"
+                           type="text" class="form-control" id="cast" name="cast" required>
                 </div>
 
 
@@ -71,6 +69,17 @@
                     <label for="synopsis" class="from-label"> Synopsis</label>
                     <input th:value="${movie?.synopsis}"
                            type="synopsis" class="form-control" id="synopsis" name="synopsis" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select name="category" id="category" class="form-control" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}" th:text="${category.name}"
+                                th:selected="${movie != null && movie.category != null ? movie.category.id == category.id : false}"
+                        ></option>
+                    </select>
                 </div>
 
                 <div class="mb-3">
