@@ -1,7 +1,7 @@
-package at.cinemaland.Service;
+package at.Cinemaland.Service;
 
-import at.cinemaland.Model.Actor;
-import at.cinemaland.Repository.ActorRepository;
+import at.Cinemaland.Model.Actor;
+import at.Cinemaland.Repository.ActorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

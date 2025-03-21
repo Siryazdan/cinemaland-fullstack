@@ -1,4 +1,4 @@
-package at.cinemaland.Model;
+package at.Cinemaland.Model;
 
 import jakarta.persistence.*;
 

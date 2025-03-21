@@ -1,7 +1,7 @@
-package at.cinemaland.Controller.api;
+package at.Cinemaland.Controller.api;
 
-import at.cinemaland.Model.Actor;
-import at.cinemaland.Service.ActorService;
+import at.Cinemaland.Model.Actor;
+import at.Cinemaland.Service.ActorService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

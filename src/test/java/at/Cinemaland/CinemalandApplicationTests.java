@@ -1,4 +1,4 @@
-package at.cinemaland;
+package at.Cinemaland;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

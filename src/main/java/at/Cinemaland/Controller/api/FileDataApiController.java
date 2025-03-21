@@ -1,7 +1,7 @@
-package at.cinemaland.Controller.api;
+package at.Cinemaland.Controller.api;
 
-import at.cinemaland.Model.FileData;
-import at.cinemaland.Service.FileDataService;
+import at.Cinemaland.Model.FileData;
+import at.Cinemaland.Service.FileDataService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

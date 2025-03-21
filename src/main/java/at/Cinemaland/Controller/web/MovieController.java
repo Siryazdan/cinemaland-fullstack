@@ -1,10 +1,10 @@
-package at.cinemaland.Controller.web;
+package at.Cinemaland.Controller.web;
 
 
-import at.cinemaland.Model.Movie;
-import at.cinemaland.Model.MovieCategory;
-import at.cinemaland.Service.MovieCategoryService;
-import at.cinemaland.Service.MovieService;
+import at.Cinemaland.Model.Movie;
+import at.Cinemaland.Model.MovieCategory;
+import at.Cinemaland.Service.MovieCategoryService;
+import at.Cinemaland.Service.MovieService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

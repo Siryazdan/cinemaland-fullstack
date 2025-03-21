@@ -1,13 +1,13 @@
-package at.cinemaland.Service;
+package at.Cinemaland.Service;
 
-import at.cinemaland.Model.Actor;
-import at.cinemaland.Model.Movie;
-import at.cinemaland.Model.MovieCategory;
-import at.cinemaland.Model.FileData;
-import at.cinemaland.Repository.ActorRepository;
-import at.cinemaland.Repository.MovieRepository;
-import at.cinemaland.Repository.MovieCategoryRepository;
-import at.cinemaland.Repository.FileDataRepository;
+import at.Cinemaland.Model.Actor;
+import at.Cinemaland.Model.Movie;
+import at.Cinemaland.Model.MovieCategory;
+import at.Cinemaland.Model.FileData;
+import at.Cinemaland.Repository.ActorRepository;
+import at.Cinemaland.Repository.MovieRepository;
+import at.Cinemaland.Repository.MovieCategoryRepository;
+import at.Cinemaland.Repository.FileDataRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
