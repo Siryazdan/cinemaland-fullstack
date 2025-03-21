@@ -1,13 +1,23 @@
-package at.Cinemaland.Model;
+package at.cinemaland.Model;
+
 
 import jakarta.persistence.*;
+
 import java.util.UUID;
 
 @Entity
-public class Actor {
+public class MovieCategory {
 
     @Id
     private String id;
+
+    public MovieCategory(String name) {
+        this.name = name;
+    }
+
+    public MovieCategory() {
+
+    }
 
     @PrePersist
     public void generateId() {
@@ -16,13 +26,9 @@ public class Actor {
 
     private String name;
 
-    private int age;
-
-    private int height;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id", referencedColumnName = "rel_id", insertable = false, updatable = false)
-    private FileData image;
+    private FileData file;
 
     public String getId() {
         return id;
@@ -40,28 +46,11 @@ public class Actor {
         this.name = name;
     }
 
-
-    public int getAge() {
-        return age;
+    public FileData getFile() {
+        return file;
     }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public FileData getImage() {
-        return image;
-    }
-
-    public void setImage(FileData image) {
-        this.image = image;
+    public void setFile(FileData file) {
+        this.file = file;
     }
 }

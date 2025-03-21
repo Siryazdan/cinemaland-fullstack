@@ -1,8 +1,8 @@
-package at.Cinemaland.Service;
+package at.cinemaland.Service;
 
 
-import at.Cinemaland.Model.MovieCategory;
-import at.Cinemaland.Repository.MovieCategoryRepository;
+import at.cinemaland.Model.MovieCategory;
+import at.cinemaland.Repository.MovieCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

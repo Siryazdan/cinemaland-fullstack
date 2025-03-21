@@ -1,7 +1,7 @@
-package at.Cinemaland.Controller.api;
+package at.cinemaland.Controller.api;
 
-import at.Cinemaland.Model.MovieCategory;
-import at.Cinemaland.Service.MovieCategoryService;
+import at.cinemaland.Model.MovieCategory;
+import at.cinemaland.Service.MovieCategoryService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
