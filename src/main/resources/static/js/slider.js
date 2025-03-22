@@ -1,11 +1,38 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const slides = document.querySelectorAll('#image-slider .slides img');
+    const slides = document.querySelector('.slides');
+    const images = slides.querySelectorAll('img');
     let currentIndex = 0;
 
-    function showNextSlide() {
-        document.querySelector('#image-slider .slides').style.transform = `translateX(-${currentIndex * 100}%)`;
-        currentIndex = (currentIndex + 1) % (slides.length);
+    function showSlide(index) {
+        if (index >= images.length) {
+            currentIndex = 0;
+        } else if (index < 0) {
+            currentIndex = images.length - 1;
+        } else {
+            currentIndex = index;
+        }
+        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
     }
 
-    setInterval(showNextSlide, 3000); // Change image every 3 seconds
+    function nextSlide() {
+        showSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentIndex - 1);
+    }
+
+    setInterval(nextSlide, 3000);
+
+    // click listener for right and left buttons
+    document.querySelector('#image-slider .nav-button.left').addEventListener('click', prevSlide);
+    document.querySelector('#image-slider .nav-button.right').addEventListener('click', nextSlide);
+
+    // click listener for each image
+    images.forEach(image => {
+        image.addEventListener('click', function () {
+            const movieId = this.getAttribute('data-movie-id');
+            window.location.href = `/movie/${movieId}`;
+        });
+    });
 });

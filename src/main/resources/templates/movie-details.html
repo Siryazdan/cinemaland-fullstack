@@ -14,11 +14,16 @@
     </div>
     <div>
         <p><strong>Genre:</strong> <span th:text="${movie.genre}"></span></p>
-        <p><strong>Category:</strong> <span th:text="${movie.category != null ? movie.category.name : 'No Category'}"></span></p>
+        <p><strong>Category:</strong> <span
+                th:text="${movie.category != null ? movie.category.name : 'No Category'}"></span></p>
         <p><strong>Director:</strong> <span th:text="${movie.director}"></span></p>
         <p><strong>Synopsis:</strong> <span th:text="${movie.synopsis}"></span></p>
         <p><strong>Cast:</strong> <span th:text="${movie.cast}"></span></p>
     </div>
+
+
+
+
 </main>
 <footer>
     <a href="/">Back to Home</a>

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cinema Website</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="description" content="Welcome to the best cinema website for movies, series, and animes!">
 
     <meta property="og:title" content="Cinema Website">
@@ -109,16 +110,19 @@
             </div>
         </div>
 
+        <div id="galaxy-background"></div>
+        <script src="/js/galaxy-background.js"></script>
+
         <div id="image-slider" class="slider">
             <div class="slides">
-                <img src="https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg" alt="Movie Poster 1">
-                <img src="https://image.tmdb.org/t/p/w500/5KCVkau1HEl7ZzfPsKAPM0sMiKc.jpg" alt="Movie Poster 4">
-                <img src="https://image.tmdb.org/t/p/w500/8UlWHLMpgZm9bx6QYh0NFoq67TZ.jpg" alt="Movie Poster 2">
-                <img src="https://image.tmdb.org/t/p/w500/6KErczPBROQty7QoIsaa6wJYXZi.jpg" alt="Movie Poster 3">
-                <img src="https://image.tmdb.org/t/p/w500/5KCVkau1HEl7ZzfPsKAPM0sMiKc.jpg" alt="Movie Poster 5">
+                <div th:each="movie : ${movies}">
+                    <img th:src="@{'/files/' + ${movie?.image != null ? movie.image.id : 'default-image-id'}}" th:alt="${movie.title}" th:data-movie-id="${movie.id}">
+                </div>
             </div>
+            <button class="nav-button left" onclick="prevSlide()">&#10094;</button>
+            <button class="nav-button right" onclick="nextSlide()">&#10095;</button>
+            <script src="/js/slider.js"></script>
         </div>
-        <script src="/js/slider.js"></script>
     </div>
 </main>
 
@@ -167,7 +171,9 @@
                     <div>
                         <div class="title" th:text="${movie.title}"></div>
                         <div class="rating">
-                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"></svg>
+                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 12.5l-4.33 2.27 1.04-4.81-3.71-3.22 4.89-.42L8 1.5l1.11 4.82 4.89.42-3.71 3.22 1.04 4.81z" fill="#ffcc00"/>
+                            </svg>
                             <span th:text="${movie.rating}"></span> <span>(<span
                                 th:text="${movie.reviewsCount}"></span>+)</span>
                         </div>
@@ -203,7 +209,10 @@
             </a>
         </div>
     </div>
+    <div class="back-to-top" onclick="scrollToTop()">Back to Top</div>
 </footer>
+
+<script src="/js/footer.js"></script>
 
 </body>
 </html>
