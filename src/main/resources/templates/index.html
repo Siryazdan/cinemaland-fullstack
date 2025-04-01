@@ -15,6 +15,7 @@
     <meta property="og:image" content="https://www.cinema.com/images/logo.png">
     <meta property="og:image:alt" content="Cinema Logo">
 
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icon.png">
@@ -25,106 +26,89 @@
 
 <body>
 
-<header>
-    <div id="top" class="Wrapper">
-    </div>
-    <div>
-        <img src="https://www.cinema.de/themes/custom/cinema_www/images/logos/logo_240.png" alt="Cinema Logo"/>
-    </div>
-    <p class="main-par" th:text="#{welcome.message}">title will be translated</p>
-
-
-    <section id="login-signup">
-        <div class="wrapper">
-            <div class="auth-buttons">
-                <button class="btn btn-primary">
-                    <i class="fas fa-user-plus"></i> Sign Up
-                </button>
-                <button class="btn btn-primary">
-                    <i class="fas fa-sign-in-alt"></i> Log In
-                </button>
+<header class="fixed-nav">
+    <div class="nav-container">
+        <div class="cinemaland-logo">
+            <div class="logo-icon">
+                <i class="fas fa-film"></i>
+                <div class="play-icon">
+                    <i class="fas fa-play"></i>
+                </div>
+            </div>
+            <div class="logo-text">
+                <span class="main-text">CINEMALAND</span>
+                <span class="sub-text">Unlimited Entertainment</span>
             </div>
         </div>
-    </section>
 
-    <section id="language-selector">
-        <div class="wrapper">
-            <div id="lang-select">
-                <form action="" method="get">
-                    <select name="lang" onchange="this.form.submit()">
-                        <option value="en" th:selected="${#locale.language == 'en'}">English</option>
-                        <option value="de" th:selected="${#locale.language == 'de'}">Deutsch</option>
-                        <option value="fa" th:selected="${#locale.language == 'fa'}">فارسی</option>
-                    </select>
-                </form>
-                <i class="fas fa-globe-americas"></i>
+        <!-- Navigation Links -->
+        <nav class="main-nav">
+            <ul>
+                <li class="active"><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/actors"><i class="fas fa-film"></i> Actors </a></li>
+                <li><a href="#" id="movies-button"><i class="fas fa-tv"></i> Movies </a></li>
+                <li><a href="/top-rated"><i class="fas fa-star"></i> Top Rated</a></li>
+            </ul>
+        </nav>
+
+        <!-- Language Selector -->
+        <div class="language-selector">
+            <div class="selected-lang">
+                <i class="fas fa-globe"></i>
+                <span>EN</span>
             </div>
+            <ul class="lang-dropdown">
+                <li data-lang="en">English</li>
+                <li data-lang="de">Deutsch</li>
+                <li data-lang="fa">فارسی</li>
+            </ul>
         </div>
-    </section>
+
+        <!-- Auth Buttons -->
+        <div class="auth-buttons">
+            <button class="btn login-btn"><i class="fas fa-sign-in-alt"></i> Log In</button>
+            <button class="btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</button>
+        </div>
+    </div>
 </header>
+
+<div class="content-wrapper">
+</div>
 
 <main class="wrapper">
     <div class="content">
-        <div id="filter">
-            <h4>Choose whatever you want</h4>
-            <p>Sorted by</p>
-            <div class="input-group">
-                <label>
-                    <input type="radio" name="sort" th:checked="${sort == 'best-films'}"> Best films
-                </label>
-                <label>
-                    <input type="radio" name="sort" th:checked="${sort == 'best-series'}"> Best series
-                </label>
-                <label>
-                    <input type="radio" name="sort" th:checked="${sort == 'best-animes'}"> Best animes
-                </label>
-            </div>
+        <div id="galaxy-background"></div>
 
-            <p>Offers</p>
-            <div class="input-group">
-                <label>
-                    <input type="checkbox" name="move-review" th:checked="${moveReview}"> Movies to review
-                </label>
-                <label>
-                    <input type="checkbox" name="series-review" th:checked="${seriesReview}"> Series to review
-                </label>
-                <label>
-                    <input type="checkbox" name="animes-review" th:checked="${animesReview}"> Animes to review
-                </label>
-            </div>
+        <div class="animation-container">
+            <h1 id="three-d-text">
+    <span class="word" style="--word-index: 0; --char-total: 5">
+      <span data-char="M" style="--char-index: 0"></span>
+      <span data-char="O" style="--char-index: 1"></span>
+      <span data-char="V" style="--char-index: 2"></span>
+      <span data-char="I" style="--char-index: 3"></span>
+      <span data-char="E" style="--char-index: 4"></span>
+    </span>
+            </h1>
 
-            <p>Categories</p>
-            <div class="input-group">
-                <label>
-                    <input type="checkbox" th:checked="${categories != null and categories.contains('action')}"> For
-                    fanatsy lovers
-                </label>
-                <label>
-                    <input type="checkbox" th:checked="${categories != null and categories.contains('horror')}"> Are you
-                    scared?
-                </label>
-                <label>
-                    <input type="checkbox" th:checked="${categories != null and categories.contains('comedy')}"> Happy
-                    and Funny
-                </label>
-            </div>
+
         </div>
 
-        <div id="galaxy-background"></div>
-        <script src="/js/galaxy-background.js"></script>
-
-        <div id="image-slider" class="slider">
-            <div class="slides">
-                <div th:each="movie : ${movies}">
-                    <img th:src="@{'/files/' + ${movie?.image != null ? movie.image.id : 'default-image-id'}}" th:alt="${movie.title}" th:data-movie-id="${movie.id}">
+        <div class="text-slider-container">
+            <div id="image-slider" class="slider">
+                <div class="slides">
+                    <div th:each="movie : ${movies}">
+                        <img th:src="@{'/files/' + ${movie?.image != null ? movie.image.id : 'default-image-id'}}"
+                             th:alt="${movie.title}" th:data-movie-id="${movie.id}">
+                    </div>
                 </div>
+                <button class="nav-button left" onclick="prevSlide()">&#10094;</button>
+                <button class="nav-button right" onclick="nextSlide()">&#10095;</button>
+
             </div>
-            <button class="nav-button left" onclick="prevSlide()">&#10094;</button>
-            <button class="nav-button right" onclick="nextSlide()">&#10095;</button>
-            <script src="/js/slider.js"></script>
         </div>
     </div>
 </main>
+
 
 <div id="search">
     <form id="search-form" action="/search" method="get">
@@ -155,8 +139,22 @@
     </div>
 </section>
 
+<div id="movie-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <ul id="movie-list">
+            <li th:each="movie : ${movies}">
+                <img th:src="@{'/files/' + ${movie?.image != null ? movie.image.id : 'default-image-id'}}"
+                     th:alt="${movie.title}">
+                <span th:text="${movie.title}"></span>
+            </li>
+        </ul>
+    </div>
+</div>
+
 <section id="movies">
-    <div class="section-headline">All Movies</div>
+    <div id="all-movies-headline" class="section-headline">All Movies</div>
+    <button id="view-all-movies" class="view-all-btn">View All Movies</button>
     <div class="card-wrapper">
 
 
@@ -164,7 +162,7 @@
             <a th:href="@{'/movie/' + ${movie.id}}">
                 <div class="top"
                      th:style="|background-image:
-         url('/files/${movie?.image != null ? movie.image.id : 'default-image-id'}')|">
+             url('/files/${movie?.image != null ? movie.image.id : 'default-image-id'}')|">
                 </div>
 
                 <div class="bottom">
@@ -172,7 +170,8 @@
                         <div class="title" th:text="${movie.title}"></div>
                         <div class="rating">
                             <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8 12.5l-4.33 2.27 1.04-4.81-3.71-3.22 4.89-.42L8 1.5l1.11 4.82 4.89.42-3.71 3.22 1.04 4.81z" fill="#ffcc00"/>
+                                <path d="M8 12.5l-4.33 2.27 1.04-4.81-3.71-3.22 4.89-.42L8 1.5l1.11 4.82 4.89.42-3.71 3.22 1.04 4.81z"
+                                      fill="#ffcc00"/>
                             </svg>
                             <span th:text="${movie.rating}"></span> <span>(<span
                                 th:text="${movie.reviewsCount}"></span>+)</span>
@@ -212,7 +211,13 @@
     <div class="back-to-top" onclick="scrollToTop()">Back to Top</div>
 </footer>
 
+<script src="/js/nav.js"></script>
+<script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+<script src="/js/welcome-text.js"></script>
 <script src="/js/footer.js"></script>
+<script src="/js/moving-card-wrapper.js"></script>
+<script src="/js/slider.js"></script>
+<script src="/js/scroll-down.js"></script>
 
 </body>
 </html>

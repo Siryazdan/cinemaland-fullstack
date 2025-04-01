@@ -1,3 +1,5 @@
+server:
+  port: 3000
 spring:
   messages:
     basename: messages
@@ -13,10 +15,8 @@ spring:
     password: Xhepeto.2356
   flyway:
     default-schema: cinemaland
-  jpa:
-    open-in-view: false
   web:
     resources:
       static-locations: classpath:/static/, file:./uploads/
 file:
-  upload-directory: C:\Users\armin\OneDrive\Desktop\cinema-files
+  upload-directory: C:/Users/armin/OneDrive/Desktop/cinemaland/

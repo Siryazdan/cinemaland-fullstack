@@ -1,4 +1,4 @@
-package at.cinemaland.Config;
+package at.Cinemaland.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

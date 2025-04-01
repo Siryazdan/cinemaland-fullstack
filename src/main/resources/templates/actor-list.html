@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actor List</title>
+    <link rel="stylesheet" href="/css/actor-details.css">
+</head>
+<body>
+<header>
+    <h1>Actor List</h1>
+</header>
+<main>
+    <div id="background"></div>
+    <table>
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="actor : ${actors}">
+            <td>
+                <img th:src="@{'/files/' + ${actor.image != null ? actor.image.id : 'default-image-id'}}" alt="" height="64">
+            </td>
+            <td th:text="${actor.name}"></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

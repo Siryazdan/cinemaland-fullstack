@@ -63,4 +63,12 @@ public class MovieController {
         model.addAttribute("movies", movies);
         return "index";
     }
+
+    @GetMapping("/top-rated")
+    public String getTopRatedMovies(Model model) {
+        List<Movie> topRatedMovies = movieService.getTopRatedMovies();
+        model.addAttribute("movies", topRatedMovies);
+        return "top-rated-movies";
+    }
+
 }

@@ -1,11 +1,12 @@
 package at.Cinemaland.Controller.api;
 
+
 import at.Cinemaland.Model.MovieCategory;
 import at.Cinemaland.Service.MovieCategoryService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/movieCategories/")
+@RequestMapping("/api/categories/")
 public class MovieCategoryApiController {
     final MovieCategoryService movieCategoryService;
 

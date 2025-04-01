@@ -50,6 +50,7 @@ public class ActorService {
         fileDataService.deleteFileByRelId(id);
         actorRepository.deleteById(id);
     }
+
     public List<Actor> getActors() {
         return actorRepository.findAll();
     }

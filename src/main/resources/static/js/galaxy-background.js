@@ -10,4 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
         star.style.animationDelay = `${Math.random() * 20}s`;
         galaxyBackground.appendChild(star);
     }
+         if (galaxyBackground) {
+            galaxyBackground.style.background = 'url(/path/to/your/galaxy-image.jpg) no-repeat center center fixed';
+            galaxyBackground.style.backgroundSize = 'cover';
+        } else {
+            console.error('Element with id "galaxy-background" not found.');
+        }
 });

@@ -35,6 +35,9 @@ public class MovieService {
     public List<Movie> getMoviesByCategory(String categoryName) {
         return movieRepository.findByCategoryNameIgnoreCase(categoryName);
     }
+    public List<Movie> getTopRatedMovies() {
+        return movieRepository.findByRatingGreaterThanEqual("8.0");
+    }
 
     public List<Movie> getMovies() {
         return movieRepository.findAll();
@@ -52,10 +55,11 @@ public class MovieService {
         Movie movieToUpdate = movieRepository.findById(id).orElse(null);
         if (movieToUpdate != null) {
             movieToUpdate.setTitle(movie.getTitle());
-            movieToUpdate.setGenre(movie.getGenre());
             movieToUpdate.setDirector(movie.getDirector());
-            movieToUpdate.setSynopsis(movie.getSynopsis());
             movieToUpdate.setCast(movie.getCast());
+            movieToUpdate.setGenre(movie.getGenre());
+            movieToUpdate.setRating(movie.getRating());
+            movieToUpdate.setSynopsis(movie.getSynopsis());
 
 
             if (movie.getCategory() != null) {

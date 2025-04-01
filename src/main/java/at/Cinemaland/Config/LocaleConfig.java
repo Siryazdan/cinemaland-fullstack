@@ -1,4 +1,4 @@
-package at.cinemaland.Config;
+package at.Cinemaland.Config;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
