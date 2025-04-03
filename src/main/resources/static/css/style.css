@@ -868,7 +868,6 @@ body.modal-open #movies {
     box-shadow: 0 3px 10px rgba(255, 106, 0, 0.3);
 }
 
-/* Content Wrapper - Add this to prevent content from hiding behind nav */
 .content-wrapper {
     margin-top: 70px; /* Same as nav height */
     padding: 20px;

@@ -44,30 +44,31 @@
         <!-- Navigation Links -->
         <nav class="main-nav">
             <ul>
-                <li class="active"><a href="#"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="/actors"><i class="fas fa-film"></i> Actors </a></li>
-                <li><a href="#" id="movies-button"><i class="fas fa-tv"></i> Movies </a></li>
-                <li><a href="/top-rated"><i class="fas fa-star"></i> Top Rated</a></li>
+                <li class="/index"><a href="http://localhost:3000/?lang=en#"><i class="fas fa-home"></i> <span th:text="#{home}">Home</span></a></li>
+                <li><a href="/actors"><i class="fas fa-film"></i> <span th:text="#{actors}">Actors</span></a></li>
+                <li><a href="#" id="movies-button"><i class="fas fa-tv"></i> <span th:text="#{movies}">Movies</span></a></li>
+                <li><a href="/top-rated"><i class="fas fa-star"></i> <span th:text="#{top.rated}">Top Rated</span></a></li>
             </ul>
         </nav>
 
         <!-- Language Selector -->
         <div class="language-selector">
-            <div class="selected-lang">
-                <i class="fas fa-globe"></i>
-                <span>EN</span>
-            </div>
-            <ul class="lang-dropdown">
-                <li data-lang="en">English</li>
-                <li data-lang="de">Deutsch</li>
-                <li data-lang="fa">فارسی</li>
-            </ul>
+            <form id="language-form" action="#" method="get">
+                <div class="selected-lang">
+                    <i class="fas fa-globe"></i>
+                    <select name="lang" onchange="this.form.submit()">
+                        <option value="en" th:selected="${lang == 'en'}">EN</option>
+                        <option value="de" th:selected="${lang == 'de'}">DE</option>
+                        <option value="fa" th:selected="${lang == 'fa'}">FA</option>
+                    </select>
+                </div>
+            </form>
         </div>
 
         <!-- Auth Buttons -->
         <div class="auth-buttons">
-            <button class="btn login-btn"><i class="fas fa-sign-in-alt"></i> Log In</button>
-            <button class="btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</button>
+            <a href="/login" class="btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="/signup" class="btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
         </div>
     </div>
 </header>
@@ -121,7 +122,7 @@
 </div>
 
 <section id="categories">
-    <div class="section-headline">Categories</div>
+    <div class="section-headline" th:text="#{categories}">Categories</div>
     <div class="lane">
         <div class="lane-wrapper">
             <ul class="category-list">
@@ -153,8 +154,8 @@
 </div>
 
 <section id="movies">
-    <div id="all-movies-headline" class="section-headline">All Movies</div>
-    <button id="view-all-movies" class="view-all-btn">View All Movies</button>
+    <div id="all-movies-headline" class="section-headline" th:text="#{movies}">All Movies</div>
+    <button id="view-all-movies" class="view-all-btn" th:text="#{view.all.movies}">View All Movies</button>
     <div class="card-wrapper">
 
 
@@ -194,10 +195,10 @@
 
 <footer>
     <div class="footer-content">
-        <p><strong>Contact Information:</strong></p>
-        <p><strong>Address:</strong> Graz, Österreich</p>
-        <p><strong>Email:</strong> <a href="mailto:armin@cinema.com">armin@cinema.com</a></p>
-        <p><strong>Phone:</strong> +43 20 30 40 50</p>
+        <p><strong th:text="#{contact.information}">Contact Information:</strong></p>
+        <p><strong th:text="#{address}">Address:</strong> Graz, Österreich</p>
+        <p><strong th:text="#{email}">Email:</strong> <a href="mailto:armin@cinema.com">armin@cinema.com</a></p>
+        <p><strong th:text="#{phone}">Phone:</strong> +43 20 30 40 50</p>
 
         <div class="social-icons">
             <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
