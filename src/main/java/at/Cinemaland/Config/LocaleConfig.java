@@ -10,6 +10,7 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import java.util.Locale;
+
 import org.slf4j.Logger;
 
 
@@ -34,7 +35,6 @@ public class LocaleConfig implements WebMvcConfigurer {
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
         lci.setParamName("lang");
-        // System.out.println("LocaleChangeInterceptor Initialized - Parameter Name: " + lci.getParamName());
         logger.info("LocaleChangeInterceptor Initialized - Parameter Name: {}", lci.getParamName());
         return lci;
     }

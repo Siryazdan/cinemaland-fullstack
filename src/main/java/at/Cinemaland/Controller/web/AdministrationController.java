@@ -94,7 +94,7 @@ public class AdministrationController {
     }
 
     @PostMapping("/movie/create")
-    public String createRestaurant(Movie movie,
+    public String createMovie(Movie movie,
                                    @RequestParam("file") MultipartFile file) throws IOException {
 
         Movie entity = this.movieService.createMovie(movie);

@@ -2,6 +2,7 @@ package at.Cinemaland.Model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,6 +23,8 @@ public class Movie {
     private String cast;
     private String rating;
 
+
+
     @Column(columnDefinition = "TEXT")
     private String synopsis;
 
@@ -30,6 +33,18 @@ public class Movie {
 
     @Column(name = "movie_category_id")
     private String movieCategoryId;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne
+    @JoinColumn(name= "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "movie_category_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -47,6 +62,7 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
+
 
     private Set<Actor> actors;
 

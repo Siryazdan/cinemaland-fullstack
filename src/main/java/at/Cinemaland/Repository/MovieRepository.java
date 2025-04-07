@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends BaseRepository<Movie, String> {
+    List<Movie> findByUser_Username(String username);
     List<Movie> findByRatingGreaterThanEqual(String rating);
     List<Movie> findByTitleContainingIgnoreCase(String title);
     List<Movie> findByCategoryNameIgnoreCase(String categoryName);

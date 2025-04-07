@@ -44,10 +44,13 @@
         <!-- Navigation Links -->
         <nav class="main-nav">
             <ul>
-                <li class="/index"><a href="http://localhost:3000/?lang=en#"><i class="fas fa-home"></i> <span th:text="#{home}">Home</span></a></li>
+                <li class="/index"><a href="http://localhost:3000/?lang=en#"><i class="fas fa-home"></i> <span
+                        th:text="#{home}">Home</span></a></li>
                 <li><a href="/actors"><i class="fas fa-film"></i> <span th:text="#{actors}">Actors</span></a></li>
-                <li><a href="#" id="movies-button"><i class="fas fa-tv"></i> <span th:text="#{movies}">Movies</span></a></li>
-                <li><a href="/top-rated"><i class="fas fa-star"></i> <span th:text="#{top.rated}">Top Rated</span></a></li>
+                <li><a href="#" id="movies-button"><i class="fas fa-tv"></i> <span th:text="#{movies}">Movies</span></a>
+                </li>
+                <li><a href="/top-rated"><i class="fas fa-star"></i> <span th:text="#{top.rated}">Top Rated</span></a>
+                </li>
             </ul>
         </nav>
 
@@ -67,10 +70,21 @@
 
         <!-- Auth Buttons -->
         <div class="auth-buttons">
-            <a href="/login" class="btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
-            <a href="/signup" class="btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <div th:if="${#authentication != null and #authentication.name != 'anonymousUser'}">
+                <span>Willkommen, <span th:text="${#authentication.name}"></span>!</span>
+                <a href="/logout" class="btn logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+            <div th:if="${#authentication == null or #authentication.name == 'anonymousUser'}">
+                <a href="/login" class="btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="/signup" class="btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
         </div>
     </div>
+    <div th:if="${#authentication.name != 'anonymousUser' and #authentication.name != 'Sirnumb'}">
+        <a href="/dashboard" class="btn btn-primary">Go to My Dashboard</a>
+    </div>
+
+
 </header>
 
 <div class="content-wrapper">
@@ -82,16 +96,14 @@
 
         <div class="animation-container">
             <h1 id="three-d-text">
-    <span class="word" style="--word-index: 0; --char-total: 5">
-      <span data-char="M" style="--char-index: 0"></span>
-      <span data-char="O" style="--char-index: 1"></span>
-      <span data-char="V" style="--char-index: 2"></span>
-      <span data-char="I" style="--char-index: 3"></span>
-      <span data-char="E" style="--char-index: 4"></span>
-    </span>
+                <span class="word" style="--word-index: 0; --char-total: 5">
+                    <span data-char="M" style="--char-index: 0"></span>
+                    <span data-char="O" style="--char-index: 1"></span>
+                    <span data-char="V" style="--char-index: 2"></span>
+                    <span data-char="I" style="--char-index: 3"></span>
+                    <span data-char="E" style="--char-index: 4"></span>
+                </span>
             </h1>
-
-
         </div>
 
         <div class="text-slider-container">
@@ -104,12 +116,10 @@
                 </div>
                 <button class="nav-button left" onclick="prevSlide()">&#10094;</button>
                 <button class="nav-button right" onclick="nextSlide()">&#10095;</button>
-
             </div>
         </div>
     </div>
 </main>
-
 
 <div id="search">
     <form id="search-form" action="/search" method="get">
@@ -157,15 +167,11 @@
     <div id="all-movies-headline" class="section-headline" th:text="#{movies}">All Movies</div>
     <button id="view-all-movies" class="view-all-btn" th:text="#{view.all.movies}">View All Movies</button>
     <div class="card-wrapper">
-
-
         <div class="movie-item" th:each="movie : ${movies}">
             <a th:href="@{'/movie/' + ${movie.id}}">
                 <div class="top"
-                     th:style="|background-image:
-             url('/files/${movie?.image != null ? movie.image.id : 'default-image-id'}')|">
+                     th:style="|background-image: url('/files/${movie?.image != null ? movie.image.id : 'default-image-id'}')|">
                 </div>
-
                 <div class="bottom">
                     <div>
                         <div class="title" th:text="${movie.title}"></div>
@@ -174,14 +180,12 @@
                                 <path d="M8 12.5l-4.33 2.27 1.04-4.81-3.71-3.22 4.89-.42L8 1.5l1.11 4.82 4.89.42-3.71 3.22 1.04 4.81z"
                                       fill="#ffcc00"/>
                             </svg>
-                            <span th:text="${movie.rating}"></span> <span>(<span
-                                th:text="${movie.reviewsCount}"></span>+)</span>
+                            <span th:text="${movie.rating}"></span> <span>(<span th:text="${movie.reviewsCount}"></span>+)</span>
                         </div>
                     </div>
                     <div class="underline-category">
                         <span th:text="${movie.category != null ? movie.category.name : 'No Category'}"></span>
                     </div>
-
                     <div class="movie-details">
                         <div><strong>Genre:</strong> <span th:text="${movie.genre}"></span></div>
                         <div><strong>Director:</strong> <span th:text="${movie.director}"></span></div>

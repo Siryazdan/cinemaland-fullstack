@@ -29,12 +29,18 @@ public class MovieService {
         this.movieCategoryRepository = movieCategoryRepository;
         this.fileDataRepository = fileDataRepository;
     }
+    public List<Movie> getMoviesByUser(String username) {
+        return movieRepository.findByUser_Username(username);
+    }
+
     public List<Movie> searchMovies(String query) {
         return movieRepository.findByTitleContainingIgnoreCase(query);
     }
+
     public List<Movie> getMoviesByCategory(String categoryName) {
         return movieRepository.findByCategoryNameIgnoreCase(categoryName);
     }
+
     public List<Movie> getTopRatedMovies() {
         return movieRepository.findByRatingGreaterThanEqual("8.0");
     }
@@ -60,7 +66,6 @@ public class MovieService {
             movieToUpdate.setGenre(movie.getGenre());
             movieToUpdate.setRating(movie.getRating());
             movieToUpdate.setSynopsis(movie.getSynopsis());
-
 
             if (movie.getCategory() != null) {
                 movieToUpdate.setMovieCategoryId(movie.getCategory().getId());
