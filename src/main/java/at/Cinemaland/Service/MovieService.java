@@ -29,9 +29,6 @@ public class MovieService {
         this.movieCategoryRepository = movieCategoryRepository;
         this.fileDataRepository = fileDataRepository;
     }
-    public List<Movie> getMoviesByUser(String username) {
-        return movieRepository.findByUser_Username(username);
-    }
 
     public List<Movie> searchMovies(String query) {
         return movieRepository.findByTitleContainingIgnoreCase(query);

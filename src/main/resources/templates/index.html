@@ -68,6 +68,7 @@
             </form>
         </div>
 
+
         <!-- Auth Buttons -->
         <div class="auth-buttons">
             <div th:if="${#authentication != null and #authentication.name != 'anonymousUser'}">
@@ -80,11 +81,6 @@
             </div>
         </div>
     </div>
-    <div th:if="${#authentication.name != 'anonymousUser' and #authentication.name != 'Sirnumb'}">
-        <a href="/dashboard" class="btn btn-primary">Go to My Dashboard</a>
-    </div>
-
-
 </header>
 
 <div class="content-wrapper">
