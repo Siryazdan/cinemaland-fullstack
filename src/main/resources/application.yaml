@@ -20,5 +20,3 @@ spring:
       static-locations: classpath:/static/, file:./uploads/
 file:
   upload-directory: C:/Users/armin/OneDrive/Desktop/cinemaland/
-
-

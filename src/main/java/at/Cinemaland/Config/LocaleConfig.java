@@ -13,23 +13,20 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 
-
 @Configuration
 public class LocaleConfig implements WebMvcConfigurer {
 
-
     private static final Logger logger = LoggerFactory.getLogger(LocaleConfig.class);
-
 
     @Bean
     public LocaleResolver localeResolver() {
         CookieLocaleResolver clr = new CookieLocaleResolver();
-        clr.setDefaultLocale(Locale.ENGLISH);
+        clr.setDefaultLocale(Locale.ENGLISH); // Veraltete Methode
+        clr.setDefaultLocale(Locale.ENGLISH); // Empfohlene Methode
         clr.setCookieName("localeInfo");
         clr.setCookieMaxAge(3600);
         return clr;
     }
-
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {

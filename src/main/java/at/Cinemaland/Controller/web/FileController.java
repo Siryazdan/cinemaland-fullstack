@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/files/")
-public class FileController {
+public class FileController { // URL to access the file
 
     final FileDataService fileDataService;
 

@@ -30,7 +30,7 @@ public class MovieService {
         this.fileDataRepository = fileDataRepository;
     }
 
-    public List<Movie> searchMovies(String query) {
+    public List<Movie> searchMovies(String query) { // Search for movies by title
         return movieRepository.findByTitleContainingIgnoreCase(query);
     }
 
@@ -38,7 +38,7 @@ public class MovieService {
         return movieRepository.findByCategoryNameIgnoreCase(categoryName);
     }
 
-    public List<Movie> getTopRatedMovies() {
+    public List<Movie> getTopRatedMovies() { // Get movies with a rating of 8.0 or higher
         return movieRepository.findByRatingGreaterThanEqual("8.0");
     }
 
@@ -84,7 +84,7 @@ public class MovieService {
         return null;
     }
 
-    public Movie addActors(String movieId, Set<String> actorIds) {
+    public Movie addActors(String movieId, Set<String> actorIds) { // Add actors to a movie
         Movie movie = movieRepository.findById(movieId).orElse(null);
         if (movie != null) {
             Set<Actor> actors = actorRepository.findAllById(actorIds).stream().collect(Collectors.toSet());

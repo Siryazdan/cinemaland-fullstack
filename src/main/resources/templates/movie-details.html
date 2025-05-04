@@ -338,6 +338,11 @@
         <p><strong>Director:</strong> <span th:text="${movie.director}"></span></p>
         <p><strong>Synopsis:</strong> <span th:text="${movie.synopsis}"></span></p>
         <p><strong>Cast:</strong> <span th:text="${movie.cast}"></span></p>
+
+        <!-- Buttons for Trailer and IMDb -->
+        <p><strong>Trailer:</strong> <a th:href="${youtubeTrailerLink}" target="_blank" class="btn btn-primary">Watch
+            Trailer</a></p>
+
     </div>
 
     <div id="comments">

@@ -18,7 +18,7 @@ public class ActorController {
         this.actorService = actorService;
     }
 
-    @GetMapping("/actors")
+    @GetMapping("/actors") // URL to access the actor list
     public String getActors(Model model) {
         List<Actor> actors = actorService.getActors();
         model.addAttribute("actors", actors);

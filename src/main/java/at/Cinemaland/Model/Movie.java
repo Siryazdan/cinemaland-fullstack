@@ -34,17 +34,6 @@ public class Movie {
     @Column(name = "movie_category_id")
     private String movieCategoryId;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @ManyToOne
-    @JoinColumn(name= "user_id")
-    private User user;
 
     @ManyToOne
     @JoinColumn(name = "movie_category_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -56,7 +45,7 @@ public class Movie {
     private FileData image;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER) // Eager fetching to load actors with the movie
     @JoinTable(
             name = "movie_actor",
             joinColumns = @JoinColumn(name = "movie_id"),

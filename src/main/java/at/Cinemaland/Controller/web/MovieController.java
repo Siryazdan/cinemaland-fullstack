@@ -4,10 +4,12 @@ import at.Cinemaland.Model.Movie;
 import at.Cinemaland.Model.MovieCategory;
 import at.Cinemaland.Service.MovieCategoryService;
 import at.Cinemaland.Service.MovieService;
-import at.Cinemaland.Service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +20,12 @@ public class MovieController {
 
     final MovieService movieService;
     final MovieCategoryService movieCategoryService;
-    final UserService userService; // Inject UserService
 
     // Constructor to inject services
     public MovieController(MovieService movieService,
-                           MovieCategoryService movieCategoryService,
-                           UserService userService) {
+                           MovieCategoryService movieCategoryService) {
         this.movieService = movieService;
         this.movieCategoryService = movieCategoryService;
-        this.userService = userService;  // Initialize UserService
     }
 
     @GetMapping("/")
@@ -40,18 +39,23 @@ public class MovieController {
         return "index";
     }
 
-    @GetMapping("/movie/{id}")
+    @GetMapping("/movie/{id}") // URL to access the movie details
     public String getMovieDetails(@PathVariable("id") String id, Model model) {
         Movie movie = movieService.getMovie(id);
         if (movie != null) {
+            // Dynamischen YouTube-Trailer-Link generieren
+            String youtubeTrailerLink = "https://www.youtube.com/results?search_query=" + movie.getTitle() + " trailer";
+
             model.addAttribute("movie", movie);
+            model.addAttribute("youtubeTrailerLink", youtubeTrailerLink);
+
             return "movie-details";
         } else {
             return "redirect:/";
         }
     }
 
-    @GetMapping("/category/{categoryName}")
+    @GetMapping("/category/{categoryName}") // URL to access the movies by category
     public String getMoviesByCategory(@PathVariable("categoryName") String categoryName, Model model) {
         List<Movie> movies = movieService.getMoviesByCategory(categoryName);
         model.addAttribute("movies", movies);
@@ -59,7 +63,7 @@ public class MovieController {
         return "category-details";
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search") // URL to access the search functionality
     public String searchMovies(@RequestParam("query") String query, Model model) {
         List<Movie> movies = movieService.searchMovies(query);
 
@@ -73,11 +77,10 @@ public class MovieController {
         return "index";
     }
 
-    @GetMapping("/top-rated")
+    @GetMapping("/top-rated") // URL to access the top-rated movies
     public String getTopRatedMovies(Model model) {
         List<Movie> topRatedMovies = movieService.getTopRatedMovies();
         model.addAttribute("movies", topRatedMovies);
         return "top-rated-movies";
     }
-
 }
