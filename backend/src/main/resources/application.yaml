@@ -14,6 +14,7 @@ spring:
     username: root
     password: Xhepeto.2356
   flyway:
+    enabled: false
     default-schema: cinemaland
   web:
     resources:
