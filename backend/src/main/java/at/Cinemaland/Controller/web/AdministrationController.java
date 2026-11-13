@@ -56,29 +56,31 @@ public class AdministrationController {
 
 
     @GetMapping("/category/{id}/update")
-    public String categoryUpdate(Model model, @PathVariable String id) {
+    public String categoryUpdate(Model model, @PathVariable("id") String id) {
         MovieCategory category = movieCategoryService.getCategory(id);
         model.addAttribute("category", category);
         return "administration/create-category";
     }
 
     @PostMapping("/category/{id}/update")
-    public String updateCategorySubmit(@PathVariable String id,
+    public String updateCategorySubmit(@PathVariable("id") String id,
                                        @RequestParam("name") String name,
-                                       @RequestParam("file") MultipartFile file) throws IOException {
+                                       @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         MovieCategory entity = movieCategoryService.updateCategory(id, name);
-        fileDataService.replaceOrUpdateFileData(file, entity.getId());
+        if (entity != null) {
+            fileDataService.replaceOrUpdateFileData(file, entity.getId());
+        }
         return "redirect:/administration";
     }
 
     @GetMapping("/category/{id}/delete")
-    public String deleteCategory(@PathVariable String id) {
+    public String deleteCategory(@PathVariable("id") String id) {
         movieCategoryService.deleteCategory(id);
         return "redirect:/administration";
     }
 
     @PostMapping("/category/create")
-    public String createCategorySubmit(@RequestParam("name") String name, @RequestParam("file") MultipartFile file) throws IOException {
+    public String createCategorySubmit(@RequestParam("name") String name, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         MovieCategory category = new MovieCategory(name);
         this.movieCategoryService.createCategory(category);
 
@@ -95,18 +97,16 @@ public class AdministrationController {
 
     @PostMapping("/movie/create")
     public String createMovie(Movie movie,
-                                   @RequestParam("file") MultipartFile file) throws IOException {
+                                   @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
 
         Movie entity = this.movieService.createMovie(movie);
-        if (file != null) {
-            fileDataService.createFileData(file, entity.getId());
-        }
+        fileDataService.createFileData(file, entity.getId()); // does nothing if no file was chosen
 
         return "redirect:/administration";
     }
 
     @GetMapping("/movie/{id}/update")
-    public String updateMovie(Model model, @PathVariable String id) {
+    public String updateMovie(Model model, @PathVariable("id") String id) {
 
         List<MovieCategory> categories = movieCategoryService.getCategories();
         Movie movie = movieService.getMovie(id);
@@ -121,26 +121,28 @@ public class AdministrationController {
     public String updateMovieSubmit(
             Movie movie,
             @PathVariable("movieId") String movieId,
-            @RequestParam("file") MultipartFile file) throws IOException {
+            @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
 
         Movie entity = movieService.updateMovie(movieId, movie);
-        fileDataService.replaceOrUpdateFileData(file, entity.getId());
+        if (entity != null) {
+            fileDataService.replaceOrUpdateFileData(file, entity.getId());
+        }
         return "redirect:/administration";
     }
 
     @GetMapping("/movie/{id}/delete")
-    public String deleteMovie(@PathVariable String id) {
+    public String deleteMovie(@PathVariable("id") String id) {
         movieService.deleteMovie(id);
         return "redirect:/administration";
     }
 
     @PostMapping("/movie/{movieId}/actor/create")
-    public String createActor(@PathVariable("movieId") String movieId, Actor actor, @RequestParam("file") MultipartFile file) throws IOException {
+    public String createActor(@PathVariable("movieId") String movieId, Actor actor, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
 
         Actor entity = actorService.createActor(actor);
         fileDataService.createFileData(file, entity.getId());
 
-        Movie movie = movieService.addActors(movieId, Set.of(entity.getId()));
+        movieService.addActors(movieId, Set.of(entity.getId()));
 
         return "redirect:/administration/movie/" + movieId + "/update";
     }
@@ -168,17 +170,19 @@ public class AdministrationController {
     @PostMapping("/movie/{movieId}/actor/{actorId}/update")
     public String updateActorSubmit(
             @PathVariable("movieId") String movieId,
-            @PathVariable String actorId,
+            @PathVariable("actorId") String actorId,
             Actor actor,
-            @RequestParam("file") MultipartFile file) throws IOException {
+            @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
 
         Actor entity = actorService.updateActor(actorId, actor);
-        fileDataService.replaceOrUpdateFileData(file, entity.getId());
+        if (entity != null) {
+            fileDataService.replaceOrUpdateFileData(file, entity.getId());
+        }
         return "redirect:/administration/movie/" + movieId + "/update";
     }
 
     @GetMapping("/movie/{movieId}/actor/{actorId}/delete")
-    public String deleteActor(@PathVariable String movieId, @PathVariable String actorId) {
+    public String deleteActor(@PathVariable("movieId") String movieId, @PathVariable("actorId") String actorId) {
         actorService.deleteActor(actorId);
         return "redirect:/administration/movie/" + movieId + "/update";
     }

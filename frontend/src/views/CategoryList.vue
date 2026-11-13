@@ -2,6 +2,7 @@
 
 import {onMounted, ref} from "vue";
 import categoryService from "@/api/category.service";
+import {fileUrl} from "@/api/api.client";
 
 export default {
   setup() {
@@ -10,7 +11,6 @@ export default {
 
     const fetchCategories = async () => {
       const response = await categoryService.getCategories();
-      console.log('Response'. response)
       categories.value = response.data;
     };
 
@@ -25,12 +25,18 @@ export default {
 
     };
     const deleteCategory = async (id) => {
+      if (!confirm('Delete this category? Its movies will be kept without a category.')) return;
       await categoryService.deleteCategory(id);
       await fetchCategories()
     };
 
     const editCategory = (selectedCategory) => {
-      category.value = selectedCategory;
+      // copy, so the list doesn't change while typing
+      category.value = {...selectedCategory};
+    };
+
+    const resetForm = () => {
+      category.value = {name: '', id: null};
     };
 
     onMounted(fetchCategories);
@@ -41,6 +47,8 @@ export default {
       saveCategory,
       deleteCategory,
       editCategory,
+      resetForm,
+      fileUrl,
     };
 
   }
@@ -58,7 +66,7 @@ export default {
     <button type="submit">
       {{ category.id ? 'Update' : 'Create' }}
     </button>
-    <button type="reset">Cancel</button>
+    <button type="reset" @click="resetForm">Cancel</button>
   </form>
   <!--
   {{category.name}}
@@ -68,8 +76,8 @@ export default {
   <ul>
     <li v-for="category in categories" :key="category.id">
       <div>
-        <img v-bind:src="'http://localhost:3000/api/files/' + category?.file?.id + '/_stream'"
-             alt="Bild"
+        <img v-if="fileUrl(category.file)" :src="fileUrl(category.file)"
+             :alt="category.name"
              width="16">
         {{ category.name }}
       </div>

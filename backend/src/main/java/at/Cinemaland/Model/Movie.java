@@ -2,7 +2,7 @@ package at.Cinemaland.Model;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -40,7 +40,7 @@ public class Movie {
     private MovieCategory category;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "rel_id", insertable = false, updatable = false)
     private FileData image;
 
@@ -51,9 +51,7 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
-
-
-    private Set<Actor> actors;
+    private Set<Actor> actors = new HashSet<>();
 
     public String getId() {
         return id;

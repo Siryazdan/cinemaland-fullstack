@@ -1,24 +1,15 @@
 import axios from "axios";
 
+// Backend URL. Can be changed with VUE_APP_API_URL in a .env file.
+export const API_BASE_URL = process.env.VUE_APP_API_URL || 'http://localhost:3000/api';
+
 const apiClient = axios.create({
-    baseURL: 'http://localhost:3000/api',
-    headers: {
-        'Content-type': 'application/json'
-    }
+    baseURL: API_BASE_URL,
 });
 
-
-apiClient.interceptors.request.use(config => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    } else {
-        console.error("Auth token not found");
-    }
-    return config;
-}, error => {
-    return Promise.reject(error);
-});
-
+/** URL of an uploaded image, or null if there is none. */
+export function fileUrl(file) {
+    return file?.id ? `${API_BASE_URL}/files/${file.id}/_stream` : null;
+}
 
 export default apiClient;
