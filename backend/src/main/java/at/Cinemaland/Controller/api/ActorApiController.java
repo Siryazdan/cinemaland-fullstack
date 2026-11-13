@@ -2,12 +2,14 @@ package at.Cinemaland.Controller.api;
 
 import at.Cinemaland.Model.Actor;
 import at.Cinemaland.Service.ActorService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/actors/")
+@RequestMapping("/api/actors")
 public class ActorApiController {
 
     final ActorService actorService;
@@ -16,28 +18,38 @@ public class ActorApiController {
         this.actorService = actorService;
     }
 
-    @PostMapping
+    @PostMapping({"", "/"})
+    @ResponseStatus(HttpStatus.CREATED)
     public Actor createActor(@RequestBody Actor actor) {
         return actorService.createActor(actor);
     }
 
-    @GetMapping
+    @GetMapping({"", "/"})
     public List<Actor> getActors() {
         return actorService.getActors();
     }
 
     @GetMapping("/{id}")
-    public Actor getActor(@PathVariable String id) {
-        return actorService.getActor(id);
+    public Actor getActor(@PathVariable("id") String id) {
+        Actor actor = actorService.getActor(id);
+        if (actor == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor not found");
+        }
+        return actor;
     }
 
     @PutMapping("/{id}")
-    public Actor updateActor(@PathVariable String id, @RequestBody Actor actor) {
-        return actorService.updateActor(id, actor);
+    public Actor updateActor(@PathVariable("id") String id, @RequestBody Actor actor) {
+        Actor updated = actorService.updateActor(id, actor);
+        if (updated == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor not found");
+        }
+        return updated;
     }
 
     @DeleteMapping("/{id}")
-    public void deleteActor(@PathVariable String id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteActor(@PathVariable("id") String id) {
         actorService.deleteActor(id);
     }
 }

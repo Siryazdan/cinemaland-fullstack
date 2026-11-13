@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import java.time.Duration;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -20,11 +21,9 @@ public class LocaleConfig implements WebMvcConfigurer {
 
     @Bean
     public LocaleResolver localeResolver() {
-        CookieLocaleResolver clr = new CookieLocaleResolver();
-        clr.setDefaultLocale(Locale.ENGLISH); // Veraltete Methode
-        clr.setDefaultLocale(Locale.ENGLISH); // Empfohlene Methode
-        clr.setCookieName("localeInfo");
-        clr.setCookieMaxAge(3600);
+        CookieLocaleResolver clr = new CookieLocaleResolver("localeInfo");
+        clr.setDefaultLocale(Locale.ENGLISH);
+        clr.setCookieMaxAge(Duration.ofHours(1));
         return clr;
     }
 

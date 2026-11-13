@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +46,8 @@ public class MovieController {
         Movie movie = movieService.getMovie(id);
         if (movie != null) {
             // Dynamischen YouTube-Trailer-Link generieren
-            String youtubeTrailerLink = "https://www.youtube.com/results?search_query=" + movie.getTitle() + " trailer";
+            String youtubeTrailerLink = "https://www.youtube.com/results?search_query="
+                    + URLEncoder.encode(movie.getTitle() + " trailer", StandardCharsets.UTF_8);
 
             model.addAttribute("movie", movie);
             model.addAttribute("youtubeTrailerLink", youtubeTrailerLink);
@@ -64,8 +67,9 @@ public class MovieController {
     }
 
     @GetMapping("/search") // URL to access the search functionality
-    public String searchMovies(@RequestParam("query") String query, Model model) {
+    public String searchMovies(@RequestParam(value = "query", defaultValue = "") String query, Model model) {
         List<Movie> movies = movieService.searchMovies(query);
+        model.addAttribute("categories", movieCategoryService.getCategories());
 
         if (movies.isEmpty()) {
             model.addAttribute("message", "No movies found for your search.");

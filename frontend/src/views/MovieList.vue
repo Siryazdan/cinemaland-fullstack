@@ -1,9 +1,10 @@
 <script>
-import {onMounted, ref, toRaw} from "vue";
+import {onMounted, ref} from "vue";
 import movieService from "@/api/movie.service";
 import Movie from "@/models/Movie";
 import categoryService from "@/api/category.service";
 import fileDataService from "@/api/file-data.service";
+import {fileUrl} from "@/api/api.client";
 
 export default {
   setup() {
@@ -13,6 +14,7 @@ export default {
     const categories = ref([]);
     const previewUrl = ref(null);
     const selectedFile = ref(null);
+    const error = ref('');
 
     const handleFileUpload = (event) => {
       const file = event.target.files[0];
@@ -34,10 +36,10 @@ export default {
       try {
         const response = await fileDataService.createFile(selectedMovie.value.id, formData);
         previewUrl.value = null;
-        console.log("Upload successful:", response.data);
+        selectedMovie.value.image = response.data;
         await fetchMovies();
-      } catch (error) {
-        console.error("Error uploading file:", error);
+      } catch (e) {
+        error.value = 'Upload failed.';
         previewUrl.value = null;
       }
     };
@@ -48,11 +50,11 @@ export default {
 
       try {
         const response = await fileDataService.updateFile(fileId, formData);
-        console.log("Upload successful:", response.data);
+        selectedMovie.value.image = response.data;
         await fetchMovies();
         previewUrl.value = null;
-      } catch (error) {
-        console.error("Error uploading file:", error);
+      } catch (e) {
+        error.value = 'Upload failed.';
         previewUrl.value = null;
       }
     };
@@ -70,35 +72,45 @@ export default {
 
     const editMovie = (movie) => {
       toggleEditMode();
-      console.log('Edit Movie', toRaw(movie));
-      selectedMovie.value = movie;
-      console.log('Selected Movie', toRaw(selectedMovie.value));
+      // copy, so the list doesn't change before "Update" is clicked
+      selectedMovie.value = {
+        ...movie,
+        // same shape as the <option> values, so the dropdown shows the current category
+        category: movie.category ? {id: movie.category.id, name: movie.category.name} : null,
+      };
     }
 
     const saveMovie = async () => {
-      if (selectedMovie.value.id) {
-        await movieService.updateMovie(selectedMovie.value).then(() => {
-          console.log('Movie updated');
+      error.value = '';
+      try {
+        if (selectedMovie.value.id) {
+          await movieService.updateMovie(selectedMovie.value);
           toggleEditMode();
-        });
-      } else {
-        await movieService.createMovie(selectedMovie.value).then(async (data) => {
-          console.log('Movie created', data);
-          toggleEditMode();
-        });
+        } else {
+          // keep the drawer open with the new movie, so an image can be uploaded right away
+          const response = await movieService.createMovie(selectedMovie.value);
+          selectedMovie.value = response.data;
+        }
+        await fetchMovies();
+      } catch (e) {
+        error.value = 'Saving failed. Please check your input.';
       }
-      await fetchMovies();
     }
     const deleteMovie = async (id) => {
-      await movieService.deleteMovie(id).then(() => {
-        console.log('Movie deleted');
-      });
+      if (!confirm('Delete this movie?')) return;
+      try {
+        await movieService.deleteMovie(id);
+      } catch (e) {
+        error.value = 'Delete failed.';
+      }
       await fetchMovies();
-
     }
     const toggleEditMode = () => {
       editMode.value = !editMode.value;
       selectedMovie.value = new Movie();
+      selectedFile.value = null;
+      previewUrl.value = null;
+      error.value = '';
     }
 
     onMounted(fetchMovies);
@@ -116,7 +128,9 @@ export default {
       handleFileUpload,
       updateFile,
       createFile,
-      previewUrl
+      previewUrl,
+      error,
+      fileUrl
     };
   }
 }
@@ -132,8 +146,8 @@ export default {
       <ul>
         <li v-for="movie in movies" :key="movie.id">
           <div class="card">
-            <img v-if="movie?.image?.id"
-                 v-bind:src="'http://localhost:3000/api/files/' + movie?.image?.id + '/_stream'" alt="Image">
+            <img v-if="fileUrl(movie.image)"
+                 :src="fileUrl(movie.image)" :alt="movie.title">
             <img v-else src="https://placehold.co/227x127" alt="No Image" @click="editMovie(movie)"
                  title="Add Image" class="no-image"/>
             <div class="card-body">
@@ -181,16 +195,17 @@ export default {
         </div>
         <div class="form-group">
           <label for="rating">Rating<sup>*</sup></label>
-          <input type="number" min="1" max="10" id="rating" v-model="selectedMovie.rating" required>
+          <input type="number" min="1" max="10" step="0.1" id="rating" v-model="selectedMovie.rating" required>
         </div>
         <div class="form-group">
           <label for="category">Category<sup>*</sup></label>
           <select name="category" id="category" v-model="selectedMovie.category" required>
-            <option v-for="category in categories" v-bind:value="category" :key="category.id">
+            <option v-for="category in categories" :value="{id: category.id, name: category.name}" :key="category.id">
               {{ category.name }}
             </option>
           </select>
         </div>
+        <p v-if="error" class="error">{{ error }}</p>
         <button type="submit">{{ selectedMovie?.id ? 'Update' : 'Create' }}</button>
       </form>
 
@@ -249,6 +264,10 @@ export default {
 </template>
 
 <style scoped>
+.error {
+  color: #dc3545;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
