@@ -1,5 +1,7 @@
 package at.Cinemaland.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+// Hibernate lazy-loading proxies have extra fields that Jackson can't turn into JSON
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class FileData {
 
     @Id
@@ -17,6 +21,9 @@ public class FileData {
     @PrePersist
     public void generateId() {
         this.id = UUID.randomUUID().toString();
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
     }
 
     private String filePath;
@@ -39,6 +46,7 @@ public class FileData {
         this.id = id;
     }
 
+    @JsonIgnore // don't show the server's folder structure in the API
     public String getFilePath() {
         return filePath;
     }

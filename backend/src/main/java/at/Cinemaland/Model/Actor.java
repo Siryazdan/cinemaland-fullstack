@@ -21,7 +21,7 @@ public class Actor {
 
     private int height;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "rel_id", insertable = false, updatable = false)
     private FileData image;
 

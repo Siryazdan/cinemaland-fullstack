@@ -1,11 +1,11 @@
-import formDataApiClient from "@/api/form-data-api.client";
+import apiClient from "@/api/api.client";
 
-
+// For FormData, axios sets the correct multipart Content-Type (with boundary) automatically
 export default {
     updateFile(relId, formData) {
-        return formDataApiClient.put(`/files/${relId}`, formData);
+        return apiClient.put(`/files/${relId}`, formData);
     },
     createFile(relId, formData) {
-        return formDataApiClient.post(`/files/${relId}`, formData);
+        return apiClient.post(`/files/${relId}`, formData);
     }
 }
