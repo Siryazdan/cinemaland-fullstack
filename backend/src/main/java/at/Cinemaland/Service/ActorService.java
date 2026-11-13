@@ -24,6 +24,7 @@ public class ActorService {
     }
 
     public Actor createActor(Actor actor, MultipartFile image) throws IOException {
+        actor.setId(null);
         Actor entity = actorRepository.save(actor);
         fileDataService.createFileData(image, entity.getId());
 
@@ -43,6 +44,7 @@ public class ActorService {
     }
 
     public Actor createActor(Actor actor) {
+        actor.setId(null); // a new actor always gets a new ID
         return actorRepository.save(actor);
     }
 

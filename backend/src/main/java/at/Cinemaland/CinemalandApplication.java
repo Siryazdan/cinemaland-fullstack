@@ -1,11 +1,10 @@
-package at.cinemaland;
+package at.Cinemaland;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+// Must be in the same package as Controller/, Service/, Model/, Repository/ - otherwise Spring finds none of them
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "at.Cinemaland.Repository")
 public class CinemalandApplication {
 
     public static void main(String[] args) {

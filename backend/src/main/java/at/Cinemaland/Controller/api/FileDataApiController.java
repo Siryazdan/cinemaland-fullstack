@@ -20,7 +20,7 @@ public class FileDataApiController {
     }
 
     @PostMapping("{relId}")
-    public FileData createFileData(@PathVariable("relId") String relId, @RequestBody MultipartFile file) throws IOException {
+    public FileData createFileData(@PathVariable("relId") String relId, @RequestParam("file") MultipartFile file) throws IOException {
         return fileDataService.createFileData(file, relId);
     }
 
@@ -35,7 +35,7 @@ public class FileDataApiController {
     }
 
     @PutMapping("{id}")
-    public FileData updateFile(@PathVariable("id") String id, @RequestBody MultipartFile file) throws IOException {
+    public FileData updateFile(@PathVariable("id") String id, @RequestParam("file") MultipartFile file) throws IOException {
         return fileDataService.replaceOrUpdateFileData(file, id);
     }
 

@@ -1,26 +1,31 @@
 package at.Cinemaland.Service;
 
-
 import at.Cinemaland.Model.FileData;
-
 import at.Cinemaland.Repository.FileDataRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.CacheControl;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class FileDataService {
+
+    private static final Logger log = LoggerFactory.getLogger(FileDataService.class);
 
     @Value("${file.upload-directory}")
     private String uploadDir;
@@ -31,47 +36,56 @@ public class FileDataService {
         this.fileDataRepository = fileDataRepository;
     }
 
+    /**
+     * Saves the uploaded file for the given movie/actor/category (relId).
+     * An existing file for the same relId is replaced.
+     * Returns null if no file was uploaded.
+     */
     public FileData createFileData(MultipartFile file, String relId) throws IOException {
-
-        FileData currentImage = getFileDataByRelId(relId);
-        if (currentImage != null) {
-            deleteFileData(currentImage.getId());
-            try {
-                Path path = Paths.get(currentImage.getFilePath());
-                Files.delete(path);
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+        if (file == null || file.isEmpty()) {
+            return null;
         }
 
+        deleteFileByRelId(relId); // remove the old image (database row + file on disk)
 
         FileData fileData = new FileData();
         fileData.setRelId(relId);
-        fileData.setFileName(file.getOriginalFilename());
+        fileData.setFileName(file.getOriginalFilename() != null ? file.getOriginalFilename() : "file");
         fileData.setFileExtension(getFileExtension(file.getOriginalFilename()));
         fileData.setFileSize(file.getSize());
-        fileData.setMimetype(file.getContentType());
-        fileData.setFilePath(saveFileToLocalSystem(file));
+        fileData.setMimetype(file.getContentType() != null ? file.getContentType() : MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        fileData.setFilePath(saveFileToLocalSystem(file, fileData.getFileExtension()));
 
         return fileDataRepository.save(fileData);
     }
 
-    private String saveFileToLocalSystem(MultipartFile file) throws IOException {
-
-        Path path = Paths.get(uploadDir);
-        if (!Files.exists(path)) {
-            Files.createDirectories(path);
+    /** Replaces the file for relId. If no new file was uploaded, the current one is kept. */
+    public FileData replaceOrUpdateFileData(MultipartFile file, String relId) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return getFileDataByRelId(relId);
         }
+        return createFileData(file, relId);
+    }
 
-        String filePath = uploadDir + file.getOriginalFilename();
-        file.transferTo(new File(filePath));
+    private String saveFileToLocalSystem(MultipartFile file, String extension) throws IOException {
+        Path directory = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Files.createDirectories(directory);
 
-        return filePath;
+        // Random name: two uploads with the same name don't overwrite each other,
+        // and a file name like "../../x" can't write outside the upload folder
+        Path target = directory.resolve(UUID.randomUUID() + extension);
+        file.transferTo(target);
+
+        return target.toString();
     }
 
     private String getFileExtension(String originalFilename) {
         if (originalFilename != null && originalFilename.contains(".")) {
-            return originalFilename.substring(originalFilename.lastIndexOf("."));
+            String ext = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
+            // keep only simple extensions like ".jpg"
+            if (ext.matches("\\.[a-z0-9]{1,8}")) {
+                return ext;
+            }
         }
         return "";
     }
@@ -80,39 +94,18 @@ public class FileDataService {
         return fileDataRepository.findById(id).orElse(null);
     }
 
-    public FileData replaceOrUpdateFileData(MultipartFile file, String id) throws IOException {
-        FileData currentImage = getFileDataByRelId(id);
-        FileData updatedFile = new FileData();
-
-        if (currentImage != null && file.getSize() > 0) {
-            deleteFileData(currentImage.getId());
-            updatedFile = createFileData(file, id);
-        }
-        if (currentImage == null && file.getSize() > 0) {
-            updatedFile = createFileData(file, id);
-        }
-
-        return updatedFile;
+    private FileData getFileDataByRelId(String relId) {
+        return fileDataRepository.findByRelId(relId);
     }
 
-    private void deleteFileData(String id) {
-        fileDataRepository.deleteById(id);
-
-    }
-
-    private FileData getFileDataByRelId(String id) {
-        return fileDataRepository.findByRelId(id);
-    }
-
-    public void deleteFileByRelId(String id) {
-        FileData file = fileDataRepository.findByRelId(id);
+    public void deleteFileByRelId(String relId) {
+        FileData file = fileDataRepository.findByRelId(relId);
         if (file == null) return;
         fileDataRepository.deleteById(file.getId());
         try {
-            Path path = Paths.get(file.getFilePath());
-            Files.delete(path);
+            Files.deleteIfExists(Paths.get(file.getFilePath()));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            log.warn("Could not delete file {}: {}", file.getFilePath(), e.getMessage());
         }
     }
 
@@ -120,8 +113,12 @@ public class FileDataService {
         return fileDataRepository.findAll();
     }
 
+    /** Sends the file to the browser so it can be shown directly (e.g. in an <img> tag). */
     public ResponseEntity<Resource> streamFile(String id) throws IOException {
         FileData fileData = getFileData(id);
+        if (fileData == null) {
+            return ResponseEntity.notFound().build();
+        }
 
         Path filePath = Paths.get(fileData.getFilePath()).normalize();
         Resource resource = new UrlResource(filePath.toUri());
@@ -130,14 +127,23 @@ public class FileDataService {
             return ResponseEntity.notFound().build();
         }
 
-        MediaType mediatype = Files.probeContentType(filePath) != null
-                ? MediaType.parseMediaType(Files.probeContentType(filePath))
-                : MediaType.APPLICATION_OCTET_STREAM;
+        String contentType = Files.probeContentType(filePath);
+        if (contentType == null) {
+            contentType = fileData.getMimetype();
+        }
+        MediaType mediaType;
+        try {
+            mediaType = MediaType.parseMediaType(contentType);
+        } catch (Exception e) {
+            mediaType = MediaType.APPLICATION_OCTET_STREAM;
+        }
 
         return ResponseEntity.ok()
-                .contentType(mediatype)
-                .header("Content-Disposition",
-                        "attachment; filename=\"" + resource.getFilename() + "\"")
+                .contentType(mediaType)
+                .cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
+                // "inline" = show in the browser, "attachment" would force a download
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.inline().filename(fileData.getFileName()).build().toString())
                 .body(resource);
     }
 }

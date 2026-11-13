@@ -1,3 +1,5 @@
+# Example configuration. Instead of editing application.yaml you can also just set
+# the environment variables DB_URL, DB_USERNAME, DB_PASSWORD, UPLOAD_DIR, FLYWAY_ENABLED.
 spring:
   servlet:
     multipart:
@@ -9,11 +11,7 @@ spring:
     username: [YOUR_USERNAME]
     password: [YOUR_PASSWORD]
   flyway:
+    enabled: true
     default-schema: cinemaland
-  jpa:
-    open-in-view: false
-  web:
-    resources:
-      static-locations: classpath:/static/, file:./uploads/
 file:
-  upload-directory: 'C:\Users\armin\OneDrive\Desktop\Cinema-files'
+  upload-directory: ./uploads/

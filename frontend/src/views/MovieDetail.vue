@@ -1,40 +1,57 @@
 <script>
-
-import apiClient from "@/api/api.client";
-import {useRoute} from "vue-router";
 import movieService from "@/api/movie.service";
-import {onMounted, ref} from "vue";
+import {fileUrl} from "@/api/api.client";
+import {onMounted, ref, watch} from "vue";
 
 export default {
   name: 'MovieDetail',
   props: {
-    id: String
+    id: {
+      type: String,
+      required: true
+    }
   },
-  setup() {
-    const movie = ref({name: '', id: null});
-    const route = useRoute();
-
-    const apiBaseUrl = apiClient.defaults.baseURL;
+  setup(props) {
+    const movie = ref(null);
+    const error = ref('');
 
     const fetchMovie = async () => {
-      const response = await movieService.getMovie(route.params.id);
-      movie.value = response.data;
+      try {
+        const response = await movieService.getMovie(props.id);
+        movie.value = response.data;
+      } catch (e) {
+        error.value = 'Movie not found.';
+      }
     };
+
     onMounted(fetchMovie);
-    return {
-      movie,
-      apiBaseUrl
-    };
+    watch(() => props.id, fetchMovie);
+
+    return {movie, error, fileUrl};
   }
 }
-
 </script>
 
 <template>
   <div class="movie-detail">
-    <img v-if="movie?.image?.id" :src="`${apiBaseUrl}/files/${movie.image.id}/_stream`" alt="Movie Image">
-    <h1>{{ movie?.title }}</h1>
-    <p>{{ movie?.genre }}, {{ movie?.director }}, {{ movie?.cast }}</p>
+    <p v-if="error">{{ error }}</p>
+    <template v-else-if="movie">
+      <img v-if="fileUrl(movie.image)" :src="fileUrl(movie.image)" :alt="movie.title">
+      <h1>{{ movie.title }}</h1>
+      <p>{{ movie.genre }} · {{ movie.director }} · ⭐ {{ movie.rating }}</p>
+      <p v-if="movie.category">Category: {{ movie.category.name }}</p>
+      <p>{{ movie.synopsis }}</p>
+
+      <div class="actor-list" v-if="movie.actors && movie.actors.length">
+        <h2>Actors</h2>
+        <ul>
+          <li v-for="actor in movie.actors" :key="actor.id">
+            <router-link :to="`/actors/${actor.id}`">{{ actor.name }}</router-link>
+          </li>
+        </ul>
+      </div>
+      <p v-else-if="movie.cast">Cast: {{ movie.cast }}</p>
+    </template>
   </div>
 </template>
 
