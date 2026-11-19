@@ -1,98 +1,88 @@
-# 🎬 Cinemaland – Discover and Manage Movies & Series
+# 🎬 Cinemaland
 
-Cinemaland is a full-stack web application for browsing, adding, and managing movies and TV series. Built with Java (Spring Boot) on the backend and Vue 3 on the frontend, this project demonstrates modern full-stack architecture and responsive design.
+A full-stack web app for browsing and managing movies, actors and categories. It has a public website, an admin area, and a REST API used by a separate Vue frontend.
 
----
+Built with **Spring Boot** (backend) and **Vue 3** (frontend).
 
-## 🚀 Tech Stack
+## Features
 
-**Frontend (Vue.js):**
-- Vue 3
-- Vue Router
-- Axios
-- Vue CLI
-- Babel & ESLint
+- Browse movies by category, see top-rated movies, and search
+- Movie and actor detail pages
+- Admin area to create, edit and delete movies, actors and categories
+- Image upload for movie posters
+- Website available in English, German and Persian
+- REST API for the Vue frontend
 
-**Backend (Spring Boot):**
-- Java 21
-- Spring Boot
-- Spring Web
-- Spring Data JPA
-- MySQL
-- REST API + Thymeleaf admin pages
-- Flyway (database migrations)
+## Tech Stack
 
----
+| Part | Technologies |
+|---|---|
+| Backend | Java 21, Spring Boot 3, Spring Data JPA, Thymeleaf, Flyway |
+| Frontend | Vue 3, Vue Router, Axios, Vue CLI |
+| Database | MySQL |
 
-## 🎯 Features
-
-- 🔍 Browse movies and TV series
-- ➕ Add new movie/series entries
-- 🗑️ Edit or delete entries
-- ⚙️ RESTful communication between frontend and backend
-- 💡 Responsive, clean UI built with Vue CLI and Axios
-
----
-
-## 🛠️ Project Structure
+## Project Structure
 
 ```
 cinemaland-fullstack/
-├── backend/    Spring Boot (port 3000)
-│   ├── src/main/java/at/Cinemaland/
-│   │   ├── Controller/api/   REST API used by the Vue frontend (/api/...)
-│   │   ├── Controller/web/   Thymeleaf pages (/, /movie/{id}, /administration, ...)
-│   │   ├── Model/            JPA entities (Movie, Actor, MovieCategory, FileData)
-│   │   ├── Repository/       database access
-│   │   └── Service/          business logic + image upload
-│   └── src/main/resources/
-│       ├── db/migration/     Flyway SQL scripts
-│       └── templates/        Thymeleaf HTML pages
-└── frontend/   Vue 3 (port 8400)
+├── backend/    Spring Boot: website, admin area and REST API (port 3000)
+└── frontend/   Vue 3 app (port 8400)
 ```
 
----
+## Getting Started
 
-## ⚙️ Backend Setup
+**You need:** Java 21, Node.js and MySQL.
 
-1. Create the database:
-   ```sql
-   CREATE DATABASE cinemaland;
-   ```
-2. Set your database password as an environment variable (it is **not** stored in the code):
-   ```bash
-   # Linux / macOS
-   export DB_PASSWORD=your_mysql_password
-   # Windows PowerShell
-   $env:DB_PASSWORD="your_mysql_password"
-   ```
-3. On a **new, empty** database, also set `FLYWAY_ENABLED=true` – Flyway then creates all tables for you.
-4. Start:
-   ```bash
-   cd backend
-   ./gradlew bootRun
-   ```
+**1. Create the database**
 
-| Variable | Default | Meaning |
-|---|---|---|
-| `DB_URL` | `jdbc:mysql://localhost:3306/cinemaland` | database URL |
-| `DB_USERNAME` | `root` | database user |
-| `DB_PASSWORD` | *(empty)* | database password |
-| `FLYWAY_ENABLED` | `false` | create tables automatically (new database) |
-| `UPLOAD_DIR` | `./uploads/` | folder for uploaded images |
-| `CORS_ORIGINS` | `http://localhost:8400,http://localhost:8080` | allowed frontend URLs |
+```sql
+CREATE DATABASE cinemaland;
+```
 
-Admin area (Thymeleaf): http://localhost:3000/administration
+**2. Start the backend**
 
----
+```bash
+cd backend
+export DB_PASSWORD=your_mysql_password   # Windows: $env:DB_PASSWORD="..."
+export FLYWAY_ENABLED=true               # first start only: creates the tables
+./gradlew bootRun
+```
 
-## ⚙️ Frontend Setup
+- Website: http://localhost:3000
+- Admin area: http://localhost:3000/administration
+
+**3. Start the frontend**
 
 ```bash
 cd frontend
 npm install
-npm run serve   # http://localhost:8400
-npm run lint
+npm run serve
 ```
 
-The backend URL can be changed in a `.env` file (see `.env.example`).
+Then open http://localhost:8400
+
+### Settings (environment variables)
+
+| Variable | Default | Description |
+|---|---|---|
+| `DB_URL` | `jdbc:mysql://localhost:3306/cinemaland` | Database URL |
+| `DB_USERNAME` | `root` | Database user |
+| `DB_PASSWORD` | *(empty)* | Database password |
+| `FLYWAY_ENABLED` | `false` | Create tables automatically on a new database |
+| `UPLOAD_DIR` | `./uploads/` | Folder for uploaded images |
+| `CORS_ORIGINS` | `http://localhost:8400,http://localhost:8080` | Allowed frontend URLs |
+
+The frontend's backend URL can be changed in a `.env` file (see `frontend/.env.example`).
+
+## API
+
+| Endpoint | Description |
+|---|---|
+| `/api/movies/` | Movies and their actors (GET, POST, PUT, DELETE) |
+| `/api/categories/` | Categories (GET, POST, PUT, DELETE) |
+| `/api/actors` | Actors (GET, POST, PUT, DELETE) |
+| `/api/files/` | Image upload and download |
+
+## Author
+
+**Armin Jazdanpanahi** · [GitHub](https://github.com/Siryazdan) · arminyazdanpanahi3@gmail.com
