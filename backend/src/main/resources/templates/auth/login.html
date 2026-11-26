@@ -3,60 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Log in · Cinemaland</title>
+    <title>Cinemaland · Your personal movie collection</title>
+    <meta name="description" content="Cinemaland is a personal movie collection app by Armin Jazdanpanahi. Organize your movies, actors and categories in your own private space.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;500&family=Yellowtail&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@400;500&family=Yellowtail&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/auth.css}">
+    <link rel="stylesheet" th:href="@{/css/landing.css}">
 </head>
-<body class="auth-page">
+<body class="landing-page">
 
-<main class="auth-card">
-    <div class="auth-logo">
+<!-- Top bar -->
+<header class="lp-nav">
+    <a class="auth-logo lp-brand" th:href="@{/login}" aria-label="Cinemaland home">
+        <span class="logo-icon"><i class="fas fa-film"></i></span>
+        <span>
+            <span class="main-text">CINEMALAND</span>
+            <span class="signature"><span class="credit">a film by</span><span class="aj">AJ</span></span>
+        </span>
+    </a>
+    <nav class="lp-links" aria-label="Main">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#about">About</a>
+    </nav>
+    <div class="lp-actions">
+        <a class="lp-btn-ghost" href="#login">Log in</a>
+        <a class="lp-btn" th:href="@{/signup}">Sign up</a>
+    </div>
+</header>
+
+<!-- Hero + login -->
+<section class="lp-hero">
+    <div class="lp-hero-text">
+        <span class="lp-eyebrow"><i class="fas fa-clapperboard"></i> Your personal cinema</span>
+        <h1>Every movie you love,<br><span class="lp-gradient">in one place.</span></h1>
+        <p class="lp-sub">
+            Cinemaland is your own private movie library. Add the films you love, organize them
+            by category, keep track of the actors, upload posters and find any title in seconds.
+        </p>
+        <div class="lp-cta">
+            <a class="lp-btn lp-btn-lg" th:href="@{/signup}"><i class="fas fa-user-plus"></i> Create free account</a>
+            <a class="lp-btn-ghost lp-btn-lg" href="#features">Learn more</a>
+        </div>
+        <ul class="lp-points">
+            <li><i class="fas fa-lock"></i> Private to you</li>
+            <li><i class="fas fa-language"></i> English · Deutsch · فارسی</li>
+            <li><i class="fas fa-bolt"></i> Free to use</li>
+        </ul>
+    </div>
+
+    <div class="auth-card lp-login" id="login">
+        <h2>Welcome back</h2>
+        <p class="lead">Log in to open your movie collection.</p>
+
+        <div class="alert alert-error" th:if="${param.error}" role="alert">
+            <i class="fas fa-circle-exclamation"></i>
+            <span>Wrong email or password. Please try again.</span>
+        </div>
+        <div class="alert alert-success" th:if="${param.logout}" role="status">
+            <i class="fas fa-circle-check"></i>
+            <span>You have been logged out. See you soon!</span>
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="field">
+                <label for="email">Email</label>
+                <div class="input-wrap">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com"
+                           required autofocus>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <div class="input-wrap">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" autocomplete="current-password"
+                           placeholder="Your password" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">Log in</button>
+        </form>
+
+        <p class="switch">New to Cinemaland? <a th:href="@{/signup}">Create an account</a></p>
+    </div>
+</section>
+
+<div class="lp-strip" aria-hidden="true"></div>
+
+<!-- Features -->
+<section class="lp-section" id="features">
+    <span class="lp-eyebrow">Features</span>
+    <h2 class="lp-title">Everything your movie collection needs</h2>
+    <p class="lp-section-sub">Built for movie lovers who want their favorite films organized, searchable and all in one place.</p>
+
+    <div class="lp-grid">
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-film"></i></span>
+            <h3>Your movie library</h3>
+            <p>Add movies with title, director, genre, rating and synopsis, then edit or remove them at any time.</p>
+        </article>
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-layer-group"></i></span>
+            <h3>Categories</h3>
+            <p>Group your films into your own categories, such as Action, Drama or Weekend favorites, and browse them easily.</p>
+        </article>
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-user-astronaut"></i></span>
+            <h3>Actors &amp; cast</h3>
+            <p>Keep track of the actors you love and see which movies they appear in, each with their own detail page.</p>
+        </article>
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-image"></i></span>
+            <h3>Poster uploads</h3>
+            <p>Upload a poster for every movie so your collection looks like a real cinema wall.</p>
+        </article>
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-star"></i></span>
+            <h3>Top rated &amp; search</h3>
+            <p>See your highest-rated movies at a glance and find any title in seconds with search.</p>
+        </article>
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-shield-halved"></i></span>
+            <h3>Private &amp; secure</h3>
+            <p>Your collection belongs only to you. Nobody else can see or change your entries, and passwords are stored safely encrypted.</p>
+        </article>
+    </div>
+</section>
+
+<!-- How it works -->
+<section class="lp-section" id="how">
+    <span class="lp-eyebrow">How it works</span>
+    <h2 class="lp-title">Start your collection in three steps</h2>
+
+    <ol class="lp-steps">
+        <li>
+            <span class="lp-step-no">1</span>
+            <h3>Create an account</h3>
+            <p>Sign up with your email in a few seconds. It's free.</p>
+        </li>
+        <li>
+            <span class="lp-step-no">2</span>
+            <h3>Add your movies</h3>
+            <p>Add films, categories and actors in your personal admin area.</p>
+        </li>
+        <li>
+            <span class="lp-step-no">3</span>
+            <h3>Enjoy your cinema</h3>
+            <p>Browse, search and rediscover your collection whenever you like.</p>
+        </li>
+    </ol>
+</section>
+
+<!-- About the creator -->
+<section class="lp-section" id="about">
+    <div class="lp-about">
+        <div class="lp-avatar" aria-hidden="true">AJ</div>
+        <div>
+            <span class="lp-eyebrow">About the creator</span>
+            <h2 class="lp-title">Made by Armin Jazdanpanahi</h2>
+            <p>
+                Hi, I'm Armin. I built Cinemaland as a full-stack project because I love movies and wanted
+                a simple, good-looking place to keep my own collection. The backend is built with
+                <strong>Java&nbsp;21 and Spring Boot</strong>, the frontend with <strong>Vue&nbsp;3</strong>,
+                and the data lives in <strong>MySQL</strong>.
+            </p>
+            <div class="lp-tags">
+                <span>Java 21</span><span>Spring Boot</span><span>Spring Security</span>
+                <span>Vue 3</span><span>MySQL</span><span>Thymeleaf</span>
+            </div>
+            <a class="lp-btn-ghost" href="https://github.com/Siryazdan" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> View my GitHub
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Final call to action -->
+<section class="lp-final">
+    <h2>Ready to build your own cinema?</h2>
+    <p>Join Cinemaland and start your movie collection today.</p>
+    <div class="lp-cta">
+        <a class="lp-btn lp-btn-lg" th:href="@{/signup}">Get started</a>
+        <a class="lp-btn-ghost lp-btn-lg" href="#login">I already have an account</a>
+    </div>
+</section>
+
+<footer class="lp-footer">
+    <div class="auth-logo lp-brand lp-brand-sm">
         <span class="logo-icon"><i class="fas fa-film"></i></span>
         <span>
             <span class="main-text">CINEMALAND</span>
             <span class="signature"><span class="credit">a film by</span><span class="aj">AJ</span></span>
         </span>
     </div>
-
-    <h1>Welcome back</h1>
-    <p class="lead">Log in to manage your own movie collection.</p>
-
-    <div class="alert alert-error" th:if="${param.error}" role="alert">
-        <i class="fas fa-circle-exclamation"></i>
-        <span>Wrong email or password. Please try again.</span>
-    </div>
-    <div class="alert alert-success" th:if="${param.logout}" role="status">
-        <i class="fas fa-circle-check"></i>
-        <span>You have been logged out. See you soon!</span>
-    </div>
-
-    <form th:action="@{/login}" method="post">
-        <div class="field">
-            <label for="email">Email</label>
-            <div class="input-wrap">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com"
-                       required autofocus>
-            </div>
-        </div>
-
-        <div class="field">
-            <label for="password">Password</label>
-            <div class="input-wrap">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="password" name="password" autocomplete="current-password"
-                       placeholder="Your password" required>
-            </div>
-        </div>
-
-        <button type="submit" class="btn-primary">Log in</button>
-    </form>
-
-    <p class="switch">New to Cinemaland? <a th:href="@{/signup}">Create an account</a></p>
-</main>
+    <p>&copy; <span th:text="${#dates.year(#dates.createNow())}">2026</span> Armin Jazdanpanahi. All rights reserved.</p>
+    <a href="https://github.com/Siryazdan" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+</footer>
 
 </body>
 </html>
