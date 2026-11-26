@@ -1,49 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${actor != null ? 'Edit Actor' : 'Create Actor'}"></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-          crossorigin="anonymous">
-</head>
-<body>
-<div class="container">
-    <h1 th:text="${actor != null ? 'Edit Actor' : 'Create Actor'}">Create Actor</h1>
-    <form
-            th:action="${actor != null
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${actor != null ? 'Edit ' + actor.name : 'Add an actor'})}"></head>
+<body id="top">
+
+<header th:replace="~{fragments/layout :: nav('collection')}"></header>
+
+<main class="page">
+    <div class="page-header">
+        <div>
+            <a class="eyebrow" th:href="@{/administration/movie/{id}/update(id=${movie.id})}"><i class="fas fa-arrow-left"></i>
+                Back to <span th:text="${movie.title}">movie</span></a>
+            <h1 class="page-title" th:if="${actor == null}">Add an <span class="gradient-text">actor</span></h1>
+            <h1 class="page-title" th:if="${actor != null}">Edit <span class="gradient-text" th:text="${actor.name}">actor</span></h1>
+            <p class="page-sub">For <strong th:text="${movie.title}">movie</strong></p>
+        </div>
+    </div>
+
+    <form class="panel narrow"
+          th:action="${actor != null
             ? '/administration/movie/' + movie.id + '/actor/' + actor.id + '/update'
             : '/administration/movie/' + movie.id + '/actor/create'}"
-            method="post"
-            class="mt-4"
-            enctype="multipart/form-data">
+          method="post" enctype="multipart/form-data">
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input th:value="${actor?.name}"
-                   type="text" class="form-control" id="name" name="name" required>
+        <div class="form-grid">
+            <div class="field full">
+                <label for="name">Name</label>
+                <input th:value="${actor?.name}" type="text" id="name" name="name" maxlength="255" required>
+            </div>
+
+            <div class="field">
+                <label for="age">Age</label>
+                <input th:value="${actor?.age}" type="number" min="0" max="130" id="age" name="age" required>
+            </div>
+
+            <div class="field">
+                <label for="height">Height (cm)</label>
+                <input th:value="${actor?.height}" type="number" min="0" max="300" id="height" name="height" required>
+            </div>
+
+            <div class="field full">
+                <label for="file">Photo</label>
+                <div class="file-drop">
+                    <div class="thumb round">
+                        <img th:if="${actor != null and actor.image != null}" th:src="@{/files/{id}(id=${actor.image.id})}" alt="Current photo">
+                        <i class="fas fa-user" th:unless="${actor != null and actor.image != null}"></i>
+                    </div>
+                    <div>
+                        <input type="file" id="file" name="file" accept="image/*">
+                        <div class="hint" th:text="${actor != null and actor.image != null} ? 'Choose a file only if you want to replace the photo.' : 'Optional. JPG or PNG, up to 10 MB.'">Optional</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="age" class="form-label">Age</label>
-            <input th:value="${actor?.age}"
-                   type="number" class="form-control" id="age" name="age" required>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-floppy-disk"></i>
+                <span th:text="${actor == null ? 'Add actor' : 'Save changes'}">Save</span></button>
+            <a class="btn btn-ghost btn-lg" th:href="@{/administration/movie/{id}/update(id=${movie.id})}">Cancel</a>
         </div>
-
-        <div class="mb-3">
-            <label for="height" class="form-label">Height (in cm)</label>
-            <input th:value="${actor?.height}"
-                   type="number" class="form-control" id="height" name="height" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="file" class="form-label">Photo</label>
-            <input type="file" class="form-control" id="file" name="file"
-                   th:required="${actor != null ? false : 'required'}">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Save</button>
     </form>
-</div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

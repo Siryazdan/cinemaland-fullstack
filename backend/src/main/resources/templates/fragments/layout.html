@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Shared <head>: every page uses this, so fonts, icons and styles stay the same everywhere -->
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' · Cinemaland'">Cinemaland</title>
+    <meta name="description" content="Cinemaland, a private cinema for the movies that made you. A film by AJ.">
+    <meta name="theme-color" content="#0b0b12">
+    <link rel="icon" th:href="@{/favicon.svg}" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;700&family=Roboto:wght@400;500;700&family=Yellowtail&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body>
+
+<!-- Shared top navigation. "active" = home | actors | top | collection -->
+<header class="fixed-nav" th:fragment="nav(active)">
+    <div class="nav-container">
+        <a class="cinemaland-logo" th:href="@{/}" aria-label="Cinemaland home">
+            <span class="logo-icon"><i class="fas fa-film"></i><span class="play-icon"><i class="fas fa-play"></i></span></span>
+            <span class="logo-text">
+                <span class="main-text">CINEMALAND</span>
+                <span class="sub-row">
+                    <span class="sub-text">Unlimited Entertainment</span>
+                    <span class="aj-signature" aria-label="A film by AJ">
+                        <span class="aj-credit">a film by</span>
+                        <span class="aj-mark">AJ</span>
+                    </span>
+                </span>
+            </span>
+        </a>
+
+        <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="nav-menu" id="nav-menu">
+            <nav class="main-nav" aria-label="Main">
+                <ul>
+                    <li th:classappend="${active == 'home'} ? 'active'"><a th:href="@{/}"><i class="fas fa-house"></i> <span th:text="#{home}">Home</span></a></li>
+                    <li><a th:href="@{/#movies}"><i class="fas fa-film"></i> <span th:text="#{movies}">Movies</span></a></li>
+                    <li th:classappend="${active == 'actors'} ? 'active'"><a th:href="@{/actors}"><i class="fas fa-user-group"></i> <span th:text="#{actors}">Actors</span></a></li>
+                    <li th:classappend="${active == 'top'} ? 'active'"><a th:href="@{/top-rated}"><i class="fas fa-star"></i> <span th:text="#{top.rated}">Top Rated</span></a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-right">
+                <form class="language-selector" method="get">
+                    <label class="selected-lang">
+                        <i class="fas fa-globe"></i>
+                        <select name="lang" aria-label="Language" onchange="this.form.submit()">
+                            <option value="en" th:selected="${#locale.language == 'en'}">EN</option>
+                            <option value="de" th:selected="${#locale.language == 'de'}">DE</option>
+                            <option value="fa" th:selected="${#locale.language == 'fa'}">FA</option>
+                        </select>
+                        <i class="fas fa-chevron-down lang-caret"></i>
+                    </label>
+                </form>
+
+                <div class="auth-buttons">
+                    <div class="auth-group" sec:authorize="isAuthenticated()">
+                        <span class="welcome">Hi, <strong sec:authentication="principal.displayName">you</strong></span>
+                        <a th:href="@{/administration}" class="btn signup-btn"
+                           th:classappend="${active == 'collection'} ? 'is-current'"><i class="fas fa-clapperboard"></i> <span>My Collection</span></a>
+                        <form th:action="@{/logout}" method="post" class="logout-form">
+                            <button type="submit" class="btn login-btn" title="Log out"><i class="fas fa-right-from-bracket"></i> <span>Logout</span></button>
+                        </form>
+                    </div>
+                    <div class="auth-group" sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="btn login-btn"><i class="fas fa-right-to-bracket"></i> <span>Login</span></a>
+                        <a th:href="@{/signup}" class="btn signup-btn"><i class="fas fa-user-plus"></i> <span>Sign Up</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Shared footer -->
+<footer class="site-footer" th:fragment="footer">
+    <div class="footer-inner">
+        <a class="cinemaland-logo footer-logo" th:href="@{/}" aria-label="Cinemaland home">
+            <span class="logo-icon"><i class="fas fa-film"></i></span>
+            <span class="logo-text">
+                <span class="main-text">CINEMALAND</span>
+                <span class="sub-row"><span class="aj-signature"><span class="aj-credit">a film by</span><span class="aj-mark">AJ</span></span></span>
+            </span>
+        </a>
+        <p class="footer-note">Your private cinema. Made with <i class="fas fa-heart"></i> in Graz, Austria.</p>
+        <div class="footer-links">
+            <a href="#top" class="footer-top"><i class="fas fa-arrow-up"></i> Back to top</a>
+            <a href="https://github.com/Siryazdan" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+    </div>
+    <p class="footer-copy">&copy; <span th:text="${#dates.year(#dates.createNow())}">2026</span> Armin Jazdanpanahi. All rights reserved.</p>
+    <script th:src="@{/js/nav.js}"></script>
+</footer>
+
+</body>
+</html>

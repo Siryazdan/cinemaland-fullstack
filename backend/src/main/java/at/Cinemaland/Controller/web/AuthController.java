@@ -28,7 +28,7 @@ public class AuthController {
     @GetMapping("/login")
     public String login(Authentication authentication, CsrfToken csrfToken) {
         if (isLoggedIn(authentication)) {
-            return "redirect:/administration";
+            return "redirect:/";
         }
         // Create the CSRF token (and its session) now: the landing page is long, so by the time
         // Thymeleaf reaches the form the response is already being sent and no session can be made.
@@ -39,7 +39,7 @@ public class AuthController {
     @GetMapping("/signup")
     public String signup(Authentication authentication, Model model, CsrfToken csrfToken) {
         if (isLoggedIn(authentication)) {
-            return "redirect:/administration";
+            return "redirect:/";
         }
         csrfToken.getToken();
         model.addAttribute("minPasswordLength", AppUserService.MIN_PASSWORD_LENGTH);
@@ -69,7 +69,7 @@ public class AuthController {
         }
         // log the new user in right away and take them to their own (empty) collection
         authSessionService.signIn(email, password, request, response);
-        return "redirect:/administration?welcome";
+        return "redirect:/?welcome";
     }
 
     private static boolean isLoggedIn(Authentication authentication) {

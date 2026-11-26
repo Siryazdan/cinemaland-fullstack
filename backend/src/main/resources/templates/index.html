@@ -1,243 +1,109 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js" xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Home')}"></head>
+<body id="top">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cinema Website</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <meta name="description" content="Welcome to the best cinema website for movies, series, and animes!">
+<header th:replace="~{fragments/layout :: nav('home')}"></header>
 
-    <meta property="og:title" content="Cinema Website">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.cinema.com">
-    <meta property="og:image" content="https://www.cinema.com/images/logo.png">
-    <meta property="og:image:alt" content="Cinema Logo">
+<main>
+    <!-- ===== Hero: greeting, search, stats + tonight's pick ===== -->
+    <section class="home-hero">
+        <div class="hero-backdrop" th:if="${pick != null and pick.image != null}"
+             th:style="'background-image: url(' + @{/files/{id}(id=${pick.image.id})} + ')'"></div>
 
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Yellowtail&display=swap" rel="stylesheet">
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="icon.png">
-    <link rel="manifest" href="site.webmanifest">
-    <meta name="theme-color" content="#fafafa">
+        <div class="hero-inner">
+            <div class="hero-greeting">
+                <span class="eyebrow"><i class="fas fa-ticket"></i> Your private cinema</span>
+                <h1><span th:text="${param.welcome != null} ? 'Welcome,' : 'Welcome back,'">Welcome back,</span><br><span class="gradient-text" sec:authentication="principal.displayName">friend</span></h1>
+                <p th:if="${!#lists.isEmpty(movies)}">The lights are down and your seat is ready. What are we watching tonight?</p>
+                <p th:if="${#lists.isEmpty(movies)}">Your cinema is ready, but the shelves are still empty. Let's add your first movie.</p>
 
-</head>
-
-<body>
-
-<header class="fixed-nav">
-    <div class="nav-container">
-        <a class="cinemaland-logo" th:href="@{/}" aria-label="Cinemaland home">
-            <div class="logo-icon">
-                <i class="fas fa-film"></i>
-                <div class="play-icon">
-                    <i class="fas fa-play"></i>
-                </div>
-            </div>
-            <div class="logo-text">
-                <span class="main-text">CINEMALAND</span>
-                <div class="sub-row">
-                <span class="sub-text">Unlimited Entertainment</span>
-                <span class="aj-signature" aria-label="A film by AJ">
-                    <span class="aj-credit">a film by</span>
-                    <span class="aj-mark">
-                        AJ
-                        <svg class="aj-swash" viewBox="0 0 60 12" aria-hidden="true" focusable="false">
-                            <path d="M2 8 C 15 2, 30 12, 42 6 S 56 3, 58 7"/>
-                        </svg>
-                    </span>
-                </span>
-                </div>
-            </div>
-        </a>
-
-        <!-- Menu button (phones / tablets) -->
-        <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
-            <i class="fas fa-bars"></i>
-        </button>
-
-        <div class="nav-menu" id="nav-menu">
-            <!-- Navigation Links -->
-            <nav class="main-nav" aria-label="Main">
-                <ul>
-                    <li class="active"><a th:href="@{/}"><i class="fas fa-home"></i> <span th:text="#{home}">Home</span></a></li>
-                    <li><a th:href="@{/actors}"><i class="fas fa-user-group"></i> <span th:text="#{actors}">Actors</span></a></li>
-                    <li><a href="#" id="movies-button"><i class="fas fa-film"></i> <span th:text="#{movies}">Movies</span></a></li>
-                    <li><a th:href="@{/top-rated}"><i class="fas fa-star"></i> <span th:text="#{top.rated}">Top Rated</span></a></li>
-                </ul>
-            </nav>
-
-            <div class="nav-right">
-                <!-- Language Selector -->
-                <form class="language-selector" id="language-form" action="#" method="get">
-                    <label class="selected-lang">
-                        <i class="fas fa-globe"></i>
-                        <select name="lang" aria-label="Language" onchange="this.form.submit()">
-                            <option value="en" th:selected="${lang == 'en'}">EN</option>
-                            <option value="de" th:selected="${lang == 'de'}">DE</option>
-                            <option value="fa" th:selected="${lang == 'fa'}">FA</option>
-                        </select>
-                        <i class="fas fa-chevron-down lang-caret"></i>
-                    </label>
+                <form class="search-bar" th:action="@{/search}" method="get" role="search">
+                    <label for="q" class="sr-only">Search your movies</label>
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input id="q" type="search" name="query" placeholder="Search your movies…" autocomplete="off">
+                    <button type="submit" class="btn btn-primary btn-sm">Search</button>
                 </form>
 
-                <!-- Auth Buttons -->
-                <div class="auth-buttons">
-                    <div class="auth-group" sec:authorize="isAuthenticated()">
-                        <span class="welcome">Hi, <strong sec:authentication="principal.displayName">you</strong></span>
-                        <a th:href="@{/administration}" class="btn signup-btn"><i class="fas fa-clapperboard"></i> <span>My Collection</span></a>
-                        <form th:action="@{/logout}" method="post" class="logout-form">
-                            <button type="submit" class="btn login-btn" title="Log out"><i class="fas fa-right-from-bracket"></i> <span>Logout</span></button>
-                        </form>
-                    </div>
-                    <div class="auth-group" sec:authorize="!isAuthenticated()">
-                        <a th:href="@{/login}" class="btn login-btn"><i class="fas fa-right-to-bracket"></i> <span>Login</span></a>
-                        <a th:href="@{/signup}" class="btn signup-btn"><i class="fas fa-user-plus"></i> <span>Sign Up</span></a>
-                    </div>
+                <div class="hero-stats">
+                    <a class="stat" href="#movies"><i class="fas fa-film"></i><b th:text="${#lists.size(movies)}">0</b><span>movies</span></a>
+                    <a class="stat" href="#categories"><i class="fas fa-layer-group"></i><b th:text="${#lists.size(categories)}">0</b><span>categories</span></a>
+                    <a class="stat" th:href="@{/actors}"><i class="fas fa-user-group"></i><b th:text="${actorCount}">0</b><span>actors</span></a>
                 </div>
             </div>
-        </div>
-    </div>
-</header>
 
-<div class="content-wrapper">
-</div>
-
-<main class="wrapper">
-    <div class="content">
-        <div id="galaxy-background"></div>
-
-        <div class="animation-container">
-            <h1 id="three-d-text">
-                <span class="word" style="--word-index: 0; --char-total: 5">
-                    <span data-char="M" style="--char-index: 0"></span>
-                    <span data-char="O" style="--char-index: 1"></span>
-                    <span data-char="V" style="--char-index: 2"></span>
-                    <span data-char="I" style="--char-index: 3"></span>
-                    <span data-char="E" style="--char-index: 4"></span>
-                </span>
-            </h1>
-        </div>
-
-        <div class="text-slider-container">
-            <div id="image-slider" class="slider">
-                <div class="slides">
-                    <div th:each="movie : ${movies}">
-                        <img th:src="@{'/files/' + ${movie?.image != null ? movie.image.id : 'default-image-id'}}"
-                             th:alt="${movie.title}" th:data-movie-id="${movie.id}">
-                    </div>
+            <a class="pick" th:if="${pick != null}" th:href="@{/movie/{id}(id=${pick.id})}">
+                <div th:replace="~{fragments/cards :: poster(${pick})}"></div>
+                <div>
+                    <span class="pick-label"><i class="fas fa-wand-magic-sparkles"></i> Tonight's pick</span>
+                    <h3 th:text="${pick.title}">Title</h3>
+                    <p th:text="${pick.synopsis}">Synopsis</p>
+                    <span class="go">Watch it again <i class="fas fa-arrow-right"></i></span>
                 </div>
-                <button class="nav-button left" onclick="prevSlide()">&#10094;</button>
-                <button class="nav-button right" onclick="nextSlide()">&#10095;</button>
+            </a>
+        </div>
+    </section>
+
+    <div class="page" style="padding-top: 8px;">
+
+        <div class="alert alert-success" th:if="${param.welcome}" role="status">
+            <i class="fas fa-champagne-glasses"></i>
+            <div><strong>Welcome to Cinemaland!</strong> This cinema is all yours, and only you can see what's inside.
+                Start by adding a category or your first movie in <a th:href="@{/administration}">My Collection</a>.</div>
+        </div>
+
+        <!-- ===== Empty cinema (new users) ===== -->
+        <div class="empty" th:if="${#lists.isEmpty(movies)}">
+            <i class="fas fa-clapperboard big"></i>
+            <h3>Your shelves are empty… for now</h3>
+            <p>Add a category first (like "Action" or "Rainy Sunday"), then your favorite movies.</p>
+            <div class="empty-actions">
+                <a class="btn btn-primary" th:href="@{/administration/movie/create}"><i class="fas fa-plus"></i> Add a movie</a>
+                <a class="btn btn-ghost" th:href="@{/administration/category/create}"><i class="fas fa-layer-group"></i> Create a category</a>
             </div>
         </div>
+
+        <!-- ===== Categories ===== -->
+        <section class="section" id="categories" th:if="${!#lists.isEmpty(categories)}">
+            <div class="section-head">
+                <h2 class="section-title"><i class="fas fa-layer-group"></i> <span th:text="#{categories}">Categories</span></h2>
+                <a class="section-link" th:href="@{/administration}">Manage <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="category-row">
+                <a class="category-tile" th:each="category : ${categories}"
+                   th:href="@{/category/{name}(name=${category.name})}">
+                    <img th:if="${category.file != null}" th:src="@{/files/{id}(id=${category.file.id})}" alt="" loading="lazy">
+                    <h3><span th:text="${category.name}">Category</span> <i class="fas fa-arrow-right"></i></h3>
+                </a>
+            </div>
+        </section>
+
+        <!-- ===== Top rated ===== -->
+        <section class="section" th:if="${!#lists.isEmpty(topRated)}">
+            <div class="section-head">
+                <h2 class="section-title"><i class="fas fa-star"></i> <span th:text="#{top.rated}">Top Rated</span></h2>
+                <a class="section-link" th:href="@{/top-rated}">See the ranking <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="movie-row">
+                <th:block th:each="movie : ${topRated}"><a th:replace="~{fragments/cards :: movieCard(${movie})}"></a></th:block>
+            </div>
+        </section>
+
+        <!-- ===== All movies ===== -->
+        <section class="section" id="movies" th:if="${!#lists.isEmpty(movies)}">
+            <div class="section-head">
+                <h2 class="section-title"><i class="fas fa-film"></i> <span>All movies</span>
+                    <span class="count-pill" th:text="${#lists.size(movies)}">0</span></h2>
+                <a class="section-link" th:href="@{/administration/movie/create}"><i class="fas fa-plus"></i> Add a movie</a>
+            </div>
+            <div class="movie-grid">
+                <th:block th:each="movie : ${movies}"><a th:replace="~{fragments/cards :: movieCard(${movie})}"></a></th:block>
+            </div>
+        </section>
     </div>
 </main>
 
-<div id="search">
-    <form id="search-form" action="/search" method="get">
-        <label for="search-input">
-            <span class="sr-only"></span>
-        </label>
-        <input type="text" id="search-input" name="query" placeholder="Search movies or series"
-               th:value="${searchQuery}">
-    </form>
-</div>
-
-<section id="categories">
-    <div class="section-headline" th:text="#{categories}">Categories</div>
-    <div class="lane">
-        <div class="lane-wrapper">
-            <ul class="category-list">
-                <li th:each="category : ${categories}">
-                    <div class="category-item">
-                        <a th:href="@{'/category/' + ${category.name}}">
-                            <img th:src="@{'/files/' + ${category.file != null ? category.file.id : 'default-image-id'}}"
-                                 alt="">
-                            <p th:text="${category.name}"></p>
-                        </a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</section>
-
-<div id="movie-modal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <ul id="movie-list">
-            <li th:each="movie : ${movies}">
-                <img th:src="@{'/files/' + ${movie?.image != null ? movie.image.id : 'default-image-id'}}"
-                     th:alt="${movie.title}">
-                <span th:text="${movie.title}"></span>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<section id="movies">
-    <div id="all-movies-headline" class="section-headline" th:text="#{movies}">All Movies</div>
-    <button id="view-all-movies" class="view-all-btn" th:text="#{view.all.movies}">View All Movies</button>
-    <div class="card-wrapper">
-        <div class="movie-item" th:each="movie : ${movies}">
-            <a th:href="@{'/movie/' + ${movie.id}}">
-                <div class="top"
-                     th:style="|background-image: url('/files/${movie?.image != null ? movie.image.id : 'default-image-id'}')|">
-                </div>
-                <div class="bottom">
-                    <div>
-                        <div class="title" th:text="${movie.title}"></div>
-                        <div class="rating">
-                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8 12.5l-4.33 2.27 1.04-4.81-3.71-3.22 4.89-.42L8 1.5l1.11 4.82 4.89.42-3.71 3.22 1.04 4.81z"
-                                      fill="#ffcc00"/>
-                            </svg>
-                            <span th:text="${movie.rating}"></span> <span>(<span th:text="${movie.reviewsCount}"></span>+)</span>
-                        </div>
-                    </div>
-                    <div class="underline-category">
-                        <span th:text="${movie.category != null ? movie.category.name : 'No Category'}"></span>
-                    </div>
-                    <div class="movie-details">
-                        <div><strong>Genre:</strong> <span th:text="${movie.genre}"></span></div>
-                        <div><strong>Director:</strong> <span th:text="${movie.director}"></span></div>
-                        <div><strong>Cast:</strong> <span th:text="${movie.cast}"></span></div>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
-</section>
-
-<footer>
-    <div class="footer-content">
-        <p><strong th:text="#{contact.information}">Contact Information:</strong></p>
-        <p><strong th:text="#{address}">Address:</strong> Graz, Österreich</p>
-        <p><strong th:text="#{email}">Email:</strong> <a href="mailto:armin@cinema.com">armin@cinema.com</a></p>
-        <p><strong th:text="#{phone}">Phone:</strong> +43 20 30 40 50</p>
-
-        <div class="social-icons">
-            <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
-                <i class="fab fa-instagram"></i>
-            </a>
-        </div>
-    </div>
-    <div class="back-to-top" onclick="scrollToTop()">Back to Top</div>
-</footer>
-
-<script src="/js/nav.js"></script>
-<script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
-<script src="/js/welcome-text.js"></script>
-<script src="/js/footer.js"></script>
-<script src="/js/moving-card-wrapper.js"></script>
-<script src="/js/slider.js"></script>
-<script src="/js/scroll-down.js"></script>
-
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

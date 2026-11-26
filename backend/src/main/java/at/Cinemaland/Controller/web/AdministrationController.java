@@ -77,7 +77,7 @@ public class AdministrationController {
         return DASHBOARD;
     }
 
-    @GetMapping("/category/{id}/delete")
+    @PostMapping("/category/{id}/delete")
     public String deleteCategory(@PathVariable("id") String id) {
         movieCategoryService.deleteCategory(id);
         return DASHBOARD;
@@ -102,7 +102,8 @@ public class AdministrationController {
                               @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         Movie entity = this.movieService.createMovie(movie);
         fileDataService.createFileData(file, entity.getId()); // does nothing if no file was chosen
-        return DASHBOARD;
+        // open the new movie in the editor so actors can be added right away
+        return "redirect:/administration/movie/" + entity.getId() + "/update?created";
     }
 
     @GetMapping("/movie/{id}/update")
@@ -128,7 +129,7 @@ public class AdministrationController {
         return DASHBOARD;
     }
 
-    @GetMapping("/movie/{id}/delete")
+    @PostMapping("/movie/{id}/delete")
     public String deleteMovie(@PathVariable("id") String id) {
         movieService.deleteMovie(id);
         return DASHBOARD;
@@ -181,7 +182,7 @@ public class AdministrationController {
         return "redirect:/administration/movie/" + movieId + "/update";
     }
 
-    @GetMapping("/movie/{movieId}/actor/{actorId}/delete")
+    @PostMapping("/movie/{movieId}/actor/{actorId}/delete")
     public String deleteActor(@PathVariable("movieId") String movieId, @PathVariable("actorId") String actorId) {
         actorService.deleteActor(actorId);
         return "redirect:/administration/movie/" + movieId + "/update";

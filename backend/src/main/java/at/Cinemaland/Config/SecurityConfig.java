@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/login", "/signup", "/error").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/favicon.ico").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/favicon.ico", "/favicon.svg").permitAll()
                         // images: file IDs are random UUIDs, and <img> tags can't always send a login
                         .requestMatchers(HttpMethod.GET, "/files/*", "/api/files/*/_stream").permitAll()
                         .requestMatchers("/api/auth/login", "/api/auth/signup").permitAll()
@@ -65,8 +65,8 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        // after logging in, every user lands in their own collection
-                        .defaultSuccessUrl("/administration", true)
+                        // after logging in, every user lands on their home page
+                        .defaultSuccessUrl("/", true)
                         .failureUrl("/login?error")
                         .permitAll())
                 .logout(logout -> logout

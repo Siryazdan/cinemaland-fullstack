@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Search')}"></head>
+<body id="top">
+
+<header th:replace="~{fragments/layout :: nav('home')}"></header>
+
+<main class="page">
+    <div class="page-header">
+        <div>
+            <a class="eyebrow" th:href="@{/}"><i class="fas fa-arrow-left"></i> Back home</a>
+            <h1 class="page-title">Results for "<span class="gradient-text" th:text="${query}">query</span>"</h1>
+            <p class="page-sub" th:text="${#lists.size(movies) == 1 ? '1 movie found' : #lists.size(movies) + ' movies found'}">0 movies found</p>
+        </div>
+        <form class="search-bar" th:action="@{/search}" method="get" role="search" style="flex: 1; max-width: 460px;">
+            <label for="q" class="sr-only">Search your movies</label>
+            <i class="fas fa-magnifying-glass"></i>
+            <input id="q" type="search" name="query" th:value="${query}" placeholder="Search your movies…" autocomplete="off">
+            <button type="submit" class="btn btn-primary btn-sm">Search</button>
+        </form>
+    </div>
+
+    <div class="movie-grid" th:if="${!#lists.isEmpty(movies)}">
+        <th:block th:each="movie : ${movies}"><a th:replace="~{fragments/cards :: movieCard(${movie})}"></a></th:block>
+    </div>
+
+    <div class="empty" th:if="${#lists.isEmpty(movies)}">
+        <i class="fas fa-ghost big"></i>
+        <h3>Nothing on the shelves with that name</h3>
+        <p>Check the spelling, or add it to your collection now.</p>
+        <div class="empty-actions">
+            <a class="btn btn-primary" th:href="@{/administration/movie/create}"><i class="fas fa-plus"></i> Add a movie</a>
+            <a class="btn btn-ghost" th:href="@{/}">Back home</a>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

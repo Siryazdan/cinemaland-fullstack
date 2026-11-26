@@ -1,29 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Top Rated Movies</title>
-  <link rel="stylesheet" href="/css/top-rated-movies-list.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-<header>
-  <h1>Top Rated Movies</h1>
-</header>
-<main>
-  <div id="background"></div>
-  <div class="movie-list">
-    <div th:each="movie : ${movies}">
-      <div class="movie-item">
-        <a th:href="@{'/movie/' + ${movie.id}}">
-          <img th:src="@{'/files/' + ${movie.image != null ? movie.image.id : 'default-image-id'}}" alt="" height="128">
-          <h2 th:text="${movie.title}"></h2>
-          <p><strong>Rating:</strong> <span th:text="${movie.rating}"></span> <i class="fas fa-star"></i></p>
-        </a>
-      </div>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Top Rated')}"></head>
+<body id="top">
+
+<header th:replace="~{fragments/layout :: nav('top')}"></header>
+
+<main class="page">
+    <div class="page-header">
+        <div>
+            <span class="eyebrow"><i class="fas fa-trophy"></i> Hall of fame</span>
+            <h1 class="page-title">Your <span class="gradient-text">Top Rated</span> movies</h1>
+            <p class="page-sub">Every film in your collection rated 8.0 or higher, best first.</p>
+        </div>
     </div>
-  </div>
+
+    <ol class="rank-list" th:if="${!#lists.isEmpty(movies)}">
+        <li class="rank-item" th:each="movie, it : ${movies}">
+            <a th:href="@{/movie/{id}(id=${movie.id})}">
+                <span class="rank-no" th:text="${it.count}">1</span>
+                <div class="poster">
+                    <img th:if="${movie.image != null}" th:src="@{/files/{id}(id=${movie.image.id})}" alt="" loading="lazy">
+                    <div class="poster-fallback" th:unless="${movie.image != null}"><i class="fas fa-film"></i></div>
+                </div>
+                <div>
+                    <h3 th:text="${movie.title}">Title</h3>
+                    <div class="meta">
+                        <span th:text="${movie.category != null ? movie.category.name : movie.genre}">Category</span>
+                        <span th:if="${!#strings.isEmpty(movie.director)}" th:text="| · ${movie.director}|"> · Director</span>
+                    </div>
+                </div>
+                <span class="rank-score"><i class="fas fa-star"></i><span th:text="${movie.rating}">9.0</span></span>
+            </a>
+        </li>
+    </ol>
+
+    <div class="empty" th:if="${#lists.isEmpty(movies)}">
+        <i class="fas fa-trophy big"></i>
+        <h3>No top rated movies yet</h3>
+        <p>Movies you rate 8.0 or higher show up here.</p>
+        <div class="empty-actions">
+            <a class="btn btn-primary" th:href="@{/administration/movie/create}"><i class="fas fa-plus"></i> Add a movie</a>
+        </div>
+    </div>
 </main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

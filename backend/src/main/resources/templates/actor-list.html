@@ -1,33 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actor List</title>
-    <link rel="stylesheet" href="/css/actor-details.css">
-</head>
-<body>
-<header>
-    <h1>Actor List</h1>
-</header>
-<main>
-    <div id="background"></div>
-    <table>
-        <thead>
-        <tr>
-            <th>Image</th>
-            <th>Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="actor : ${actors}">
-            <td>
-                <img th:src="@{'/files/' + ${actor.image != null ? actor.image.id : 'default-image-id'}}" alt="" height="64">
-            </td>
-            <td th:text="${actor.name}"></td>
-        </tr>
-        </tbody>
-    </table>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Actors')}"></head>
+<body id="top">
+
+<header th:replace="~{fragments/layout :: nav('actors')}"></header>
+
+<main class="page">
+    <div class="page-header">
+        <div>
+            <span class="eyebrow"><i class="fas fa-masks-theater"></i> The cast</span>
+            <h1 class="page-title">Actors in your <span class="gradient-text">cinema</span></h1>
+            <p class="page-sub" th:text="${#lists.size(actors) == 1 ? '1 actor across your movies' : #lists.size(actors) + ' actors across your movies'}">0 actors</p>
+        </div>
+    </div>
+
+    <div class="actor-grid" th:if="${!#lists.isEmpty(actors)}">
+        <article class="actor-card" th:each="actor : ${actors}">
+            <div th:replace="~{fragments/cards :: avatar(${actor})}"></div>
+            <h3 th:text="${actor.name}">Name</h3>
+            <div class="actor-facts">
+                <span th:if="${actor.age > 0}"><i class="fas fa-cake-candles"></i><span th:text="${actor.age}">40</span> years</span>
+                <span th:if="${actor.height > 0}"><i class="fas fa-ruler-vertical"></i><span th:text="${actor.height}">180</span> cm</span>
+            </div>
+            <div class="chips" th:with="played=${moviesByActor.get(actor.id)}">
+                <a class="chip" th:each="movie : ${played}" th:href="@{/movie/{id}(id=${movie.id})}">
+                    <i class="fas fa-film"></i><span th:text="${movie.title}">Movie</span>
+                </a>
+                <span class="chip" th:if="${played == null}">Not in any movie yet</span>
+            </div>
+        </article>
+    </div>
+
+    <div class="empty" th:if="${#lists.isEmpty(actors)}">
+        <i class="fas fa-user-group big"></i>
+        <h3>No actors yet</h3>
+        <p>Open one of your movies in My Collection and add its cast.</p>
+        <div class="empty-actions">
+            <a class="btn btn-primary" th:href="@{/administration}"><i class="fas fa-clapperboard"></i> Go to My Collection</a>
+        </div>
+    </div>
 </main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>
