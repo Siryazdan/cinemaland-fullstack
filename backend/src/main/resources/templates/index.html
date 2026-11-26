@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cinema Website</title>
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <meta name="description" content="Welcome to the best cinema website for movies, series, and animes!">
 
     <meta property="og:title" content="Cinema Website">
@@ -29,7 +29,7 @@
 
 <header class="fixed-nav">
     <div class="nav-container">
-        <div class="cinemaland-logo">
+        <a class="cinemaland-logo" th:href="@{/}" aria-label="Cinemaland home">
             <div class="logo-icon">
                 <i class="fas fa-film"></i>
                 <div class="play-icon">
@@ -51,48 +51,52 @@
                 </span>
                 </div>
             </div>
-        </div>
+        </a>
 
-        <!-- Navigation Links -->
-        <nav class="main-nav">
-            <ul>
-                <li class="/index"><a href="http://localhost:3000/?lang=en#"><i class="fas fa-home"></i> <span
-                        th:text="#{home}">Home</span></a></li>
-                <li><a href="/actors"><i class="fas fa-film"></i> <span th:text="#{actors}">Actors</span></a></li>
-                <li><a href="#" id="movies-button"><i class="fas fa-tv"></i> <span th:text="#{movies}">Movies</span></a>
-                </li>
-                <li><a href="/top-rated"><i class="fas fa-star"></i> <span th:text="#{top.rated}">Top Rated</span></a>
-                </li>
-            </ul>
-        </nav>
+        <!-- Menu button (phones / tablets) -->
+        <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
+            <i class="fas fa-bars"></i>
+        </button>
 
-        <!-- Language Selector -->
-        <div class="language-selector">
-            <form id="language-form" action="#" method="get">
-                <div class="selected-lang">
-                    <i class="fas fa-globe"></i>
-                    <select name="lang" onchange="this.form.submit()">
-                        <option value="en" th:selected="${lang == 'en'}">EN</option>
-                        <option value="de" th:selected="${lang == 'de'}">DE</option>
-                        <option value="fa" th:selected="${lang == 'fa'}">FA</option>
-                    </select>
-                </div>
-            </form>
-        </div>
+        <div class="nav-menu" id="nav-menu">
+            <!-- Navigation Links -->
+            <nav class="main-nav" aria-label="Main">
+                <ul>
+                    <li class="active"><a th:href="@{/}"><i class="fas fa-home"></i> <span th:text="#{home}">Home</span></a></li>
+                    <li><a th:href="@{/actors}"><i class="fas fa-user-group"></i> <span th:text="#{actors}">Actors</span></a></li>
+                    <li><a href="#" id="movies-button"><i class="fas fa-film"></i> <span th:text="#{movies}">Movies</span></a></li>
+                    <li><a th:href="@{/top-rated}"><i class="fas fa-star"></i> <span th:text="#{top.rated}">Top Rated</span></a></li>
+                </ul>
+            </nav>
 
-
-        <!-- Auth Buttons -->
-        <div class="auth-buttons">
-            <div class="auth-group" sec:authorize="isAuthenticated()">
-                <span class="welcome">Hi, <strong sec:authentication="principal.displayName">you</strong></span>
-                <a th:href="@{/administration}" class="btn signup-btn"><i class="fas fa-clapperboard"></i> My Collection</a>
-                <form th:action="@{/logout}" method="post" class="logout-form">
-                    <button type="submit" class="btn login-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            <div class="nav-right">
+                <!-- Language Selector -->
+                <form class="language-selector" id="language-form" action="#" method="get">
+                    <label class="selected-lang">
+                        <i class="fas fa-globe"></i>
+                        <select name="lang" aria-label="Language" onchange="this.form.submit()">
+                            <option value="en" th:selected="${lang == 'en'}">EN</option>
+                            <option value="de" th:selected="${lang == 'de'}">DE</option>
+                            <option value="fa" th:selected="${lang == 'fa'}">FA</option>
+                        </select>
+                        <i class="fas fa-chevron-down lang-caret"></i>
+                    </label>
                 </form>
-            </div>
-            <div class="auth-group" sec:authorize="!isAuthenticated()">
-                <a th:href="@{/login}" class="btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
-                <a th:href="@{/signup}" class="btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
+
+                <!-- Auth Buttons -->
+                <div class="auth-buttons">
+                    <div class="auth-group" sec:authorize="isAuthenticated()">
+                        <span class="welcome">Hi, <strong sec:authentication="principal.displayName">you</strong></span>
+                        <a th:href="@{/administration}" class="btn signup-btn"><i class="fas fa-clapperboard"></i> <span>My Collection</span></a>
+                        <form th:action="@{/logout}" method="post" class="logout-form">
+                            <button type="submit" class="btn login-btn" title="Log out"><i class="fas fa-right-from-bracket"></i> <span>Logout</span></button>
+                        </form>
+                    </div>
+                    <div class="auth-group" sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="btn login-btn"><i class="fas fa-right-to-bracket"></i> <span>Login</span></a>
+                        <a th:href="@{/signup}" class="btn signup-btn"><i class="fas fa-user-plus"></i> <span>Sign Up</span></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

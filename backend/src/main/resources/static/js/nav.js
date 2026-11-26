@@ -1,24 +1,29 @@
-// Language selector functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const langSelector = document.querySelector('.language-selector');
-    const selectedLang = document.querySelector('.selected-lang span');
-    const langOptions = document.querySelectorAll('.lang-dropdown li');
+// Top navigation: menu button for small screens
+document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.querySelector('.nav-toggle');
+    const menu = document.getElementById('nav-menu');
+    if (!toggle || !menu) return;
 
-    langOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            const lang = this.getAttribute('data-lang');
-            selectedLang.textContent = lang.toUpperCase();
+    function setOpen(open) {
+        menu.classList.toggle('open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        toggle.querySelector('i').className = open ? 'fas fa-xmark' : 'fas fa-bars';
+    }
 
-            // Here you would add your actual language change logic
-            console.log('Language changed to:', lang);
-        });
+    toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        setOpen(!menu.classList.contains('open'));
     });
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!langSelector.contains(e.target)) {
-            document.querySelector('.lang-dropdown').style.opacity = '0';
-            document.querySelector('.lang-dropdown').style.visibility = 'hidden';
-        }
+    // close when a link is chosen, when clicking outside, or with Escape
+    menu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () { setOpen(false); });
+    });
+    document.addEventListener('click', function (e) {
+        if (menu.classList.contains('open') && !menu.contains(e.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') setOpen(false);
     });
 });
