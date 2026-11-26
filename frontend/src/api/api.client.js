@@ -5,6 +5,8 @@ export const API_BASE_URL = process.env.VUE_APP_API_URL || 'http://localhost:300
 
 const apiClient = axios.create({
     baseURL: API_BASE_URL,
+    // send the login session cookie to the backend (it runs on another port)
+    withCredentials: true,
 });
 
 /** URL of an uploaded image, or null if there is none. */

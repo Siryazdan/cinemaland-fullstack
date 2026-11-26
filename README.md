@@ -8,6 +8,7 @@ Built with **Spring Boot** (backend) and **Vue 3** (frontend).
 
 - Browse movies by category, see top-rated movies, and search
 - Movie and actor detail pages
+- Sign up and log in: every user gets a private movie collection
 - Admin area to create, edit and delete movies, actors and categories
 - Image upload for movie posters
 - Website available in English, German and Persian
@@ -73,6 +74,19 @@ Then open http://localhost:8400
 | `CORS_ORIGINS` | `http://localhost:8400,http://localhost:8080` | Allowed frontend URLs |
 
 The frontend's backend URL can be changed in a `.env` file (see `frontend/.env.example`).
+
+## Accounts
+
+- Sign up at http://localhost:3000/signup (or in the Vue app).
+- Each user has a private collection. Nobody else can see or change your movies, actors or categories.
+- Passwords are stored as BCrypt hashes. All pages and `/api/**` need a login. Images (`/files/{id}`) are public.
+- **Upgrading an existing database:** entries created before accounts existed have no owner and stay hidden until you assign them:
+  ```sql
+  SET @me = (SELECT id FROM app_user WHERE email = 'you@example.com');
+  UPDATE movie SET user_id = @me WHERE user_id IS NULL;
+  UPDATE movie_category SET user_id = @me WHERE user_id IS NULL;
+  UPDATE actor SET user_id = @me WHERE user_id IS NULL;
+  ```
 
 ## API
 

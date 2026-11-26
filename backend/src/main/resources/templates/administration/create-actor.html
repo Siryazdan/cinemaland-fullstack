@@ -12,7 +12,7 @@
     <h1 th:text="${actor != null ? 'Edit Actor' : 'Create Actor'}">Create Actor</h1>
     <form
             th:action="${actor != null
-            ? '/administration/movie/' + movie.id + '/actor' + actor.id + '/update'
+            ? '/administration/movie/' + movie.id + '/actor/' + actor.id + '/update'
             : '/administration/movie/' + movie.id + '/actor/create'}"
             method="post"
             class="mt-4"

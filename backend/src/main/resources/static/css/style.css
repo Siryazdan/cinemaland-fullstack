@@ -911,6 +911,31 @@ footer {
     gap: 12px;
 }
 
+.auth-buttons .auth-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.auth-buttons .welcome {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.auth-buttons .welcome strong {
+    color: #fff;
+}
+
+.auth-buttons .logout-form {
+    margin: 0;
+}
+
+.auth-buttons a.btn {
+    text-decoration: none;
+    white-space: nowrap;
+}
+
 .btn {
     padding: 8px 16px;
     border-radius: 6px;
@@ -958,6 +983,7 @@ footer {
     position: relative;
     width: 50px;
     height: 50px;
+    flex-shrink: 0;
     background: linear-gradient(135deg, #ff6a00, #ff3f00);
     border-radius: 12px;
     display: flex;
@@ -1016,6 +1042,89 @@ footer {
     letter-spacing: 2px;
     text-transform: uppercase;
     margin-top: 3px;
+}
+
+/* AJ signature – "a film by AJ" credit under the logo */
+.sub-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 3px;
+}
+
+.sub-row .sub-text,
+.aj-credit {
+    margin-top: 0;
+    white-space: nowrap;
+}
+
+.aj-signature {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 0.7rem; /* keep the row as short as the tagline so the nav height doesn't change */
+    padding-left: 12px;
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.aj-credit {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.aj-mark {
+    position: relative;
+    font-family: 'Yellowtail', 'Brush Script MT', cursive;
+    font-size: 1.15rem;
+    line-height: 1;
+    color: #fff;
+    transform: rotate(-6deg);
+    display: inline-block;
+    padding-right: 4px;
+    text-shadow: 0 0 8px rgba(255, 63, 0, 0.45);
+}
+
+.aj-swash {
+    position: absolute;
+    left: -4px;
+    bottom: -4px;
+    width: 30px;
+    height: 7px;
+    overflow: visible;
+}
+
+.aj-swash path {
+    fill: none;
+    stroke: #ff5a1f;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-dasharray: 70;
+    stroke-dashoffset: 70;
+    animation: aj-draw 1.2s 0.4s ease-out forwards;
+}
+
+.cinemaland-logo:hover .aj-swash path {
+    animation: aj-redraw 0.9s ease-out forwards;
+}
+
+@keyframes aj-draw {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes aj-redraw {
+    from { stroke-dashoffset: 70; }
+    to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aj-swash path,
+    .cinemaland-logo:hover .aj-swash path {
+        animation: none;
+        stroke-dashoffset: 0;
+    }
 }
 
 /* Hover Effects */

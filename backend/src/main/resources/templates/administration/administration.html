@@ -1,22 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Administration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Collection · Cinemaland</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .admin-bar {
+            background: #0b0b12;
+            color: #fff;
+        }
+
+        .admin-bar .brand {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 1.3rem;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .admin-bar .brand i {
+            color: #ff6a00;
+        }
+
+        .admin-bar .who {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .admin-bar .who strong {
+            color: #fff;
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, #ff8a00, #ff3f00);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-accent:hover {
+            color: #fff;
+            filter: brightness(1.08);
+        }
+
+        .empty-state {
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            color: #6c757d;
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-4">
-    <h1>Administration Dashboard</h1>
 
+<header class="admin-bar py-3 mb-4">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <a th:href="@{/}" class="brand"><i class="fas fa-film me-2"></i>CINEMALAND</a>
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+            <span class="who">
+                <i class="fas fa-user-circle me-1"></i>
+                <strong sec:authentication="principal.displayName">User</strong>
+                <span class="d-none d-sm-inline">(<span sec:authentication="principal.email">email</span>)</span>
+            </span>
+            <a th:href="@{/}" class="btn btn-sm btn-outline-light"><i class="fas fa-eye me-1"></i>View my site</a>
+            <form th:action="@{/logout}" method="post" class="m-0">
+                <button type="submit" class="btn btn-sm btn-accent"><i class="fas fa-sign-out-alt me-1"></i>Logout</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<div class="container mb-5">
+    <div class="alert alert-success" th:if="${param.welcome}" role="status">
+        <i class="fas fa-star me-1"></i>
+        Welcome to Cinemaland, <strong sec:authentication="principal.displayName">friend</strong>!
+        This is your own collection - only you can see and edit it. Start by creating a category or a movie.
+    </div>
+
+    <h1>My Collection</h1>
 
     <div class="mt-4">
         <h2>Manage Movies</h2>
         <div class="d-flex justify-content-end mb-2">
-            <a href="/administration/movie/create" class="btn btn-success">Create New Movie</a>
+            <a th:href="@{/administration/movie/create}" class="btn btn-success">Create New Movie</a>
         </div>
-        <table class="table table-striped">
+        <div class="empty-state" th:if="${#lists.isEmpty(movies)}">
+            You don't have any movies yet.
+        </div>
+        <table class="table table-striped" th:unless="${#lists.isEmpty(movies)}">
             <thead>
             <tr>
                 <th>Title</th>
@@ -39,9 +116,12 @@
     <div class="mt-4">
         <h2>Manage Categories</h2>
         <div class="d-flex justify-content-end mb-2">
-            <a th:href="${'/administration/category/create'}" class="btn btn-success">Create New Category</a>
+            <a th:href="@{/administration/category/create}" class="btn btn-success">Create New Category</a>
         </div>
-        <table class="table table-striped">
+        <div class="empty-state" th:if="${#lists.isEmpty(categories)}">
+            You don't have any categories yet.
+        </div>
+        <table class="table table-striped" th:unless="${#lists.isEmpty(categories)}">
             <thead>
             <tr>
                 <th>Name</th>

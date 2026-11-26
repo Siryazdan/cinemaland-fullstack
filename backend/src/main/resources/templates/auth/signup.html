@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign up · Cinemaland</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;500&family=Yellowtail&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body class="auth-page">
+
+<main class="auth-card">
+    <div class="auth-logo">
+        <span class="logo-icon"><i class="fas fa-film"></i></span>
+        <span>
+            <span class="main-text">CINEMALAND</span>
+            <span class="signature"><span class="credit">a film by</span><span class="aj">AJ</span></span>
+        </span>
+    </div>
+
+    <h1>Create your account</h1>
+    <p class="lead">Start your own private movie collection. Only you can see and edit it.</p>
+
+    <div class="alert alert-error" th:if="${error}" role="alert">
+        <i class="fas fa-circle-exclamation"></i>
+        <span th:text="${error}">Error</span>
+    </div>
+
+    <form th:action="@{/signup}" method="post">
+        <div class="field">
+            <label for="displayName">Name</label>
+            <div class="input-wrap">
+                <i class="fas fa-user"></i>
+                <input type="text" id="displayName" name="displayName" th:value="${displayName}"
+                       autocomplete="name" placeholder="Your name" maxlength="100" required autofocus>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="email">Email</label>
+            <div class="input-wrap">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" name="email" th:value="${email}"
+                       autocomplete="email" placeholder="you@example.com" required>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" name="password" autocomplete="new-password"
+                       th:minlength="${minPasswordLength}" maxlength="72" placeholder="Choose a password" required>
+            </div>
+            <div class="hint" th:text="|At least ${minPasswordLength} characters.|">At least 8 characters.</div>
+        </div>
+
+        <div class="field">
+            <label for="confirmPassword">Confirm password</label>
+            <div class="input-wrap">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password"
+                       maxlength="72" placeholder="Repeat your password" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Sign up</button>
+    </form>
+
+    <p class="switch">Already have an account? <a th:href="@{/login}">Log in</a></p>
+</main>
+
+</body>
+</html>

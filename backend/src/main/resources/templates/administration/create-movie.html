@@ -115,9 +115,9 @@
                             <td th:text="${actor.name}"></td>
                             <td>
                                 <div class="d-flex justify-content-end gap-2">
-                                    <a th:href="${'http://localhost:3000/administration/movie/'+movie.id+'/actor/' + actor.id + '/update'}"
+                                    <a th:href="@{/administration/movie/{m}/actor/{a}/update(m=${movie.id},a=${actor.id})}"
                                        class="btn btn-primary">Edit</a>
-                                    <a th:href="${'http://localhost:3000/administration/movie/'+movie.id+'/actor/' + actor.id + '/delete'}"
+                                    <a th:href="@{/administration/movie/{m}/actor/{a}/delete(m=${movie.id},a=${actor.id})}"
                                        class="btn btn-danger">Delete</a>
                                 </div>
                             </td>
