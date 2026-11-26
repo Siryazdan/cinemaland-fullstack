@@ -41,6 +41,8 @@ public class MovieCategoryApiController {
     }
     @DeleteMapping("{id}")
     public void deleteCategory(@PathVariable("id") String id) {
-        movieCategoryService.deleteCategory(id);
+        if (!movieCategoryService.deleteCategory(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+        }
     }
 }

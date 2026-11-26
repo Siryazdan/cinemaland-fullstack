@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Log in · Cinemaland</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;500&family=Yellowtail&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body class="auth-page">
+
+<main class="auth-card">
+    <div class="auth-logo">
+        <span class="logo-icon"><i class="fas fa-film"></i></span>
+        <span>
+            <span class="main-text">CINEMALAND</span>
+            <span class="signature"><span class="credit">a film by</span><span class="aj">AJ</span></span>
+        </span>
+    </div>
+
+    <h1>Welcome back</h1>
+    <p class="lead">Log in to manage your own movie collection.</p>
+
+    <div class="alert alert-error" th:if="${param.error}" role="alert">
+        <i class="fas fa-circle-exclamation"></i>
+        <span>Wrong email or password. Please try again.</span>
+    </div>
+    <div class="alert alert-success" th:if="${param.logout}" role="status">
+        <i class="fas fa-circle-check"></i>
+        <span>You have been logged out. See you soon!</span>
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <div class="field">
+            <label for="email">Email</label>
+            <div class="input-wrap">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com"
+                       required autofocus>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" name="password" autocomplete="current-password"
+                       placeholder="Your password" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Log in</button>
+    </form>
+
+    <p class="switch">New to Cinemaland? <a th:href="@{/signup}">Create an account</a></p>
+</main>
+
+</body>
+</html>

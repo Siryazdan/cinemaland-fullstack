@@ -16,9 +16,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The personal administration area. The services only return the logged-in user's own data,
+ * so an ID of another user's movie/category/actor is treated as "not found" (back to the dashboard).
+ */
 @Controller
 @RequestMapping("/administration")
 public class AdministrationController {
+
+    private static final String DASHBOARD = "redirect:/administration";
 
     final MovieCategoryService movieCategoryService;
     final FileDataService fileDataService;
@@ -37,27 +43,25 @@ public class AdministrationController {
 
     @GetMapping()
     public String administration(Model model) {
-
         List<Movie> movies = movieService.getMovies();
         List<MovieCategory> categories = movieCategoryService.getCategories();
-
         model.addAttribute("movies", movies);
         model.addAttribute("categories", categories);
-
         return "administration/administration";
     }
 
     @GetMapping("/category/create")
     public String createCategory(Model model) {
-
         model.addAttribute("categories", null);
         return "administration/create-category";
     }
 
-
     @GetMapping("/category/{id}/update")
     public String categoryUpdate(Model model, @PathVariable("id") String id) {
         MovieCategory category = movieCategoryService.getCategory(id);
+        if (category == null) {
+            return DASHBOARD;
+        }
         model.addAttribute("category", category);
         return "administration/create-category";
     }
@@ -70,23 +74,21 @@ public class AdministrationController {
         if (entity != null) {
             fileDataService.replaceOrUpdateFileData(file, entity.getId());
         }
-        return "redirect:/administration";
+        return DASHBOARD;
     }
 
     @GetMapping("/category/{id}/delete")
     public String deleteCategory(@PathVariable("id") String id) {
         movieCategoryService.deleteCategory(id);
-        return "redirect:/administration";
+        return DASHBOARD;
     }
 
     @PostMapping("/category/create")
     public String createCategorySubmit(@RequestParam("name") String name, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         MovieCategory category = new MovieCategory(name);
         this.movieCategoryService.createCategory(category);
-
         this.fileDataService.createFileData(file, category.getId());
-
-        return "redirect:/administration";
+        return DASHBOARD;
     }
 
     @GetMapping("/movie/create")
@@ -97,23 +99,20 @@ public class AdministrationController {
 
     @PostMapping("/movie/create")
     public String createMovie(Movie movie,
-                                   @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-
+                              @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         Movie entity = this.movieService.createMovie(movie);
         fileDataService.createFileData(file, entity.getId()); // does nothing if no file was chosen
-
-        return "redirect:/administration";
+        return DASHBOARD;
     }
 
     @GetMapping("/movie/{id}/update")
     public String updateMovie(Model model, @PathVariable("id") String id) {
-
-        List<MovieCategory> categories = movieCategoryService.getCategories();
         Movie movie = movieService.getMovie(id);
-
-        model.addAttribute("categories", categories);
+        if (movie == null) {
+            return DASHBOARD;
+        }
+        model.addAttribute("categories", movieCategoryService.getCategories());
         model.addAttribute("movie", movie);
-
         return "administration/create-movie";
     }
 
@@ -122,37 +121,38 @@ public class AdministrationController {
             Movie movie,
             @PathVariable("movieId") String movieId,
             @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-
         Movie entity = movieService.updateMovie(movieId, movie);
         if (entity != null) {
             fileDataService.replaceOrUpdateFileData(file, entity.getId());
         }
-        return "redirect:/administration";
+        return DASHBOARD;
     }
 
     @GetMapping("/movie/{id}/delete")
     public String deleteMovie(@PathVariable("id") String id) {
         movieService.deleteMovie(id);
-        return "redirect:/administration";
+        return DASHBOARD;
     }
 
     @PostMapping("/movie/{movieId}/actor/create")
     public String createActor(@PathVariable("movieId") String movieId, Actor actor, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-
+        if (movieService.getMovie(movieId) == null) {
+            return DASHBOARD;
+        }
         Actor entity = actorService.createActor(actor);
         fileDataService.createFileData(file, entity.getId());
-
         movieService.addActors(movieId, Set.of(entity.getId()));
-
         return "redirect:/administration/movie/" + movieId + "/update";
     }
 
     @GetMapping("/movie/{movieId}/actor/create")
     public String actor(@PathVariable("movieId") String movieId, Model model) {
         Movie movie = movieService.getMovie(movieId);
+        if (movie == null) {
+            return DASHBOARD;
+        }
         model.addAttribute("movie", movie);
         model.addAttribute("actor", null);
-
         return "administration/create-actor";
     }
 
@@ -160,10 +160,11 @@ public class AdministrationController {
     public String actorUpdate(@PathVariable("movieId") String movieId, @PathVariable("actorId") String actorId, Model model) {
         Movie movie = movieService.getMovie(movieId);
         Actor actor = actorService.getActor(actorId);
-
+        if (movie == null || actor == null) {
+            return DASHBOARD;
+        }
         model.addAttribute("movie", movie);
         model.addAttribute("actor", actor);
-
         return "administration/create-actor";
     }
 
@@ -173,7 +174,6 @@ public class AdministrationController {
             @PathVariable("actorId") String actorId,
             Actor actor,
             @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-
         Actor entity = actorService.updateActor(actorId, actor);
         if (entity != null) {
             fileDataService.replaceOrUpdateFileData(file, entity.getId());
@@ -186,8 +186,4 @@ public class AdministrationController {
         actorService.deleteActor(actorId);
         return "redirect:/administration/movie/" + movieId + "/update";
     }
-
-
 }
-
-

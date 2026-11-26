@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en" class="no-js" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="utf-8">
@@ -15,7 +16,7 @@
     <meta property="og:image" content="https://www.cinema.com/images/logo.png">
     <meta property="og:image:alt" content="Cinema Logo">
 
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Yellowtail&display=swap" rel="stylesheet">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icon.png">
@@ -37,7 +38,18 @@
             </div>
             <div class="logo-text">
                 <span class="main-text">CINEMALAND</span>
+                <div class="sub-row">
                 <span class="sub-text">Unlimited Entertainment</span>
+                <span class="aj-signature" aria-label="A film by AJ">
+                    <span class="aj-credit">a film by</span>
+                    <span class="aj-mark">
+                        AJ
+                        <svg class="aj-swash" viewBox="0 0 60 12" aria-hidden="true" focusable="false">
+                            <path d="M2 8 C 15 2, 30 12, 42 6 S 56 3, 58 7"/>
+                        </svg>
+                    </span>
+                </span>
+                </div>
             </div>
         </div>
 
@@ -71,13 +83,16 @@
 
         <!-- Auth Buttons -->
         <div class="auth-buttons">
-            <div th:if="${#authentication != null and #authentication.name != 'anonymousUser'}">
-                <span>Willkommen, <span th:text="${#authentication.name}"></span>!</span>
-                <a href="/logout" class="btn logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <div class="auth-group" sec:authorize="isAuthenticated()">
+                <span class="welcome">Hi, <strong sec:authentication="principal.displayName">you</strong></span>
+                <a th:href="@{/administration}" class="btn signup-btn"><i class="fas fa-clapperboard"></i> My Collection</a>
+                <form th:action="@{/logout}" method="post" class="logout-form">
+                    <button type="submit" class="btn login-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </form>
             </div>
-            <div th:if="${#authentication == null or #authentication.name == 'anonymousUser'}">
-                <a href="/login" class="btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
-                <a href="/signup" class="btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <div class="auth-group" sec:authorize="!isAuthenticated()">
+                <a th:href="@{/login}" class="btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a th:href="@{/signup}" class="btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
             </div>
         </div>
     </div>

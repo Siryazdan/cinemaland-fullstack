@@ -50,6 +50,8 @@ public class ActorApiController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteActor(@PathVariable("id") String id) {
-        actorService.deleteActor(id);
+        if (!actorService.deleteActor(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor not found");
+        }
     }
 }

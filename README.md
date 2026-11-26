@@ -84,6 +84,21 @@ cinemaland-fullstack/
 
 Admin area (Thymeleaf): http://localhost:3000/administration
 
+### 🔐 Accounts & personal collections
+
+- Sign up at http://localhost:3000/signup (or in the Vue app) and you land in your own **My Collection** admin area.
+- Every user has a **private** collection: movies, categories and actors belong to the user who created them.
+  Nobody can see, edit or delete another user's entries (the API answers `404`, the admin pages redirect back).
+- Passwords are stored only as BCrypt hashes. All pages and `/api/**` require a login; images (`/files/{id}`) are public.
+- **Existing database:** the migration `V20261125200000__create_app_user_and_ownership.sql` adds the `app_user` table
+  and a `user_id` column. Entries created before it have no owner and are hidden until you assign them to an account:
+  ```sql
+  SET @me = (SELECT id FROM app_user WHERE email = 'you@example.com');
+  UPDATE movie SET user_id = @me WHERE user_id IS NULL;
+  UPDATE movie_category SET user_id = @me WHERE user_id IS NULL;
+  UPDATE actor SET user_id = @me WHERE user_id IS NULL;
+  ```
+
 ---
 
 ## ⚙️ Frontend Setup

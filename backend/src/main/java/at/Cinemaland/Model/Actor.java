@@ -1,5 +1,6 @@
 package at.Cinemaland.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -22,7 +23,9 @@ public class Actor {
     private int height;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "rel_id", insertable = false, updatable = false)
+    // the image is looked up by its rel_id - not a real foreign key (an entry may have no image)
+    @JoinColumn(name = "id", referencedColumnName = "rel_id", insertable = false, updatable = false,
+            foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private FileData image;
 
     public String getId() {
@@ -64,5 +67,18 @@ public class Actor {
 
     public void setImage(FileData image) {
         this.image = image;
+    }
+
+    /** Owner of this entry - every user has their own collection. Never sent to or read from API clients. */
+    @JsonIgnore
+    @Column(name = "user_id")
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
