@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,18 +26,22 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String login(Authentication authentication) {
+    public String login(Authentication authentication, CsrfToken csrfToken) {
         if (isLoggedIn(authentication)) {
             return "redirect:/administration";
         }
+        // Create the CSRF token (and its session) now: the landing page is long, so by the time
+        // Thymeleaf reaches the form the response is already being sent and no session can be made.
+        csrfToken.getToken();
         return "auth/login";
     }
 
     @GetMapping("/signup")
-    public String signup(Authentication authentication, Model model) {
+    public String signup(Authentication authentication, Model model, CsrfToken csrfToken) {
         if (isLoggedIn(authentication)) {
             return "redirect:/administration";
         }
+        csrfToken.getToken();
         model.addAttribute("minPasswordLength", AppUserService.MIN_PASSWORD_LENGTH);
         return "auth/signup";
     }

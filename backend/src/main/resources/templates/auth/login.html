@@ -3,16 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cinemaland · Your personal movie collection</title>
-    <meta name="description" content="Cinemaland is a personal movie collection app by Armin Jazdanpanahi. Organize your movies, actors and categories in your own private space.">
+    <title>Cinemaland · Your seat is waiting</title>
+    <meta name="description" content="Cinemaland is a private cinema for the movies that made you. Claim your free ticket and start your own movie collection.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@400;500&family=Yellowtail&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@400;500&family=Yellowtail&family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/auth.css}">
     <link rel="stylesheet" th:href="@{/css/landing.css}">
+    <script>
+        // Show the curtain only on the first visit in this browser tab
+        try { if (sessionStorage.getItem('cl-curtain')) document.documentElement.classList.add('no-curtain');
+              sessionStorage.setItem('cl-curtain', '1'); } catch (e) {}
+    </script>
 </head>
 <body class="landing-page">
+
+<!-- Opening curtain (skipped after a failed login / logout) -->
+<div class="curtain" aria-hidden="true" th:unless="${param.error != null or param.logout != null}">
+    <div class="curtain-half curtain-left"></div>
+    <div class="curtain-half curtain-right"></div>
+</div>
 
 <!-- Top bar -->
 <header class="lp-nav">
@@ -23,40 +34,265 @@
             <span class="signature"><span class="credit">a film by</span><span class="aj">AJ</span></span>
         </span>
     </a>
-    <nav class="lp-links" aria-label="Main">
-        <a href="#features">Features</a>
-        <a href="#how">How it works</a>
-        <a href="#about">About</a>
-    </nav>
     <div class="lp-actions">
         <a class="lp-btn-ghost" href="#login">Log in</a>
-        <a class="lp-btn" th:href="@{/signup}">Sign up</a>
+        <a class="lp-btn" th:href="@{/signup}">Get your ticket</a>
     </div>
 </header>
 
-<!-- Hero + login -->
-<section class="lp-hero">
-    <div class="lp-hero-text">
-        <span class="lp-eyebrow"><i class="fas fa-clapperboard"></i> Your personal cinema</span>
-        <h1>Every movie you love,<br><span class="lp-gradient">in one place.</span></h1>
-        <p class="lp-sub">
-            Cinemaland is your own private movie library. Add the films you love, organize them
-            by category, keep track of the actors, upload posters and find any title in seconds.
-        </p>
-        <div class="lp-cta">
-            <a class="lp-btn lp-btn-lg" th:href="@{/signup}"><i class="fas fa-user-plus"></i> Create free account</a>
-            <a class="lp-btn-ghost lp-btn-lg" href="#features">Learn more</a>
+<!-- ===== HERO ===== -->
+<section class="hero">
+    <!-- drifting poster wall -->
+    <div class="poster-wall" aria-hidden="true">
+        <div class="poster-row">
+            <div class="poster p1"><span>Midnight Orbit</span></div>
+            <div class="poster p2"><span>The Last Reel</span></div>
+            <div class="poster p3"><span>Neon Harbor</span></div>
+            <div class="poster p4"><span>Paper Kings</span></div>
+            <div class="poster p5"><span>Salt &amp; Smoke</span></div>
+            <div class="poster p6"><span>Quiet Thunder</span></div>
+            <div class="poster p7"><span>Velvet Hour</span></div>
+            <div class="poster p8"><span>North of Nowhere</span></div>
+            <div class="poster p1"><span>Midnight Orbit</span></div>
+            <div class="poster p2"><span>The Last Reel</span></div>
+            <div class="poster p3"><span>Neon Harbor</span></div>
+            <div class="poster p4"><span>Paper Kings</span></div>
+            <div class="poster p5"><span>Salt &amp; Smoke</span></div>
+            <div class="poster p6"><span>Quiet Thunder</span></div>
+            <div class="poster p7"><span>Velvet Hour</span></div>
+            <div class="poster p8"><span>North of Nowhere</span></div>
         </div>
-        <ul class="lp-points">
-            <li><i class="fas fa-lock"></i> Private to you</li>
-            <li><i class="fas fa-language"></i> English · Deutsch · فارسی</li>
-            <li><i class="fas fa-bolt"></i> Free to use</li>
-        </ul>
+        <div class="poster-row reverse">
+            <div class="poster p5"><span>Glass Garden</span></div>
+            <div class="poster p8"><span>Run, Juniper</span></div>
+            <div class="poster p2"><span>Hollow Sun</span></div>
+            <div class="poster p7"><span>Eleven Doors</span></div>
+            <div class="poster p3"><span>The Lighthouse Kid</span></div>
+            <div class="poster p1"><span>Static Love</span></div>
+            <div class="poster p6"><span>Ashfall</span></div>
+            <div class="poster p4"><span>Moonrise Motel</span></div>
+            <div class="poster p5"><span>Glass Garden</span></div>
+            <div class="poster p8"><span>Run, Juniper</span></div>
+            <div class="poster p2"><span>Hollow Sun</span></div>
+            <div class="poster p7"><span>Eleven Doors</span></div>
+            <div class="poster p3"><span>The Lighthouse Kid</span></div>
+            <div class="poster p1"><span>Static Love</span></div>
+            <div class="poster p6"><span>Ashfall</span></div>
+            <div class="poster p4"><span>Moonrise Motel</span></div>
+        </div>
+        <div class="poster-row">
+            <div class="poster p6"><span>Blue Monday</span></div>
+            <div class="poster p3"><span>Wild Cards</span></div>
+            <div class="poster p7"><span>The Long Rain</span></div>
+            <div class="poster p1"><span>Starlight Diner</span></div>
+            <div class="poster p4"><span>Iron Lullaby</span></div>
+            <div class="poster p8"><span>Echo Park</span></div>
+            <div class="poster p2"><span>Fever Dream</span></div>
+            <div class="poster p5"><span>Golden Hour</span></div>
+            <div class="poster p6"><span>Blue Monday</span></div>
+            <div class="poster p3"><span>Wild Cards</span></div>
+            <div class="poster p7"><span>The Long Rain</span></div>
+            <div class="poster p1"><span>Starlight Diner</span></div>
+            <div class="poster p4"><span>Iron Lullaby</span></div>
+            <div class="poster p8"><span>Echo Park</span></div>
+            <div class="poster p2"><span>Fever Dream</span></div>
+            <div class="poster p5"><span>Golden Hour</span></div>
+        </div>
+    </div>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="projector-beam" aria-hidden="true"></div>
+
+    <div class="hero-content">
+        <span class="now-showing"><span class="dot"></span> Now showing · Doors are open</span>
+        <h1>
+            <span class="h1-small">The lights are going down.</span>
+            There's a seat<br>with <span class="lp-gradient">your name</span> on it.
+        </h1>
+        <p class="hero-sub">
+            Cinemaland is a private cinema for the movies that made you.
+            Every film you love, every actor you can't forget, every poster, all in one place
+            that belongs only to you.
+        </p>
+        <div class="hero-cta">
+            <a class="ticket-btn" th:href="@{/signup}">
+                <span class="ticket-btn-main"><i class="fas fa-ticket"></i> Claim your free ticket</span>
+                <span class="ticket-btn-stub">FREE</span>
+            </a>
+            <a class="hero-login" href="#login">Already have a ticket? <strong>Log in</strong></a>
+        </div>
     </div>
 
-    <div class="auth-card lp-login" id="login">
-        <h2>Welcome back</h2>
-        <p class="lead">Log in to open your movie collection.</p>
+    <a class="scroll-hint" href="#peek" aria-label="See what's inside">
+        <span>Peek inside</span>
+        <i class="fas fa-chevron-down"></i>
+    </a>
+</section>
+
+<!-- ===== CURIOSITY ===== -->
+<section class="lp-section tease" id="peek">
+    <span class="lp-eyebrow">Be honest…</span>
+    <h2 class="lp-title">How many great movies have you already forgotten?</h2>
+
+    <div class="tease-grid">
+        <div class="tease-card">
+            <span class="tease-emoji">🌙</span>
+            <p>That movie you watched at <strong>2&nbsp;a.m.</strong> and could never find again?</p>
+        </div>
+        <div class="tease-card">
+            <span class="tease-emoji">🎭</span>
+            <p>The actor whose name has been on the <strong>tip of your tongue</strong> for weeks?</p>
+        </div>
+        <div class="tease-card">
+            <span class="tease-emoji">🏆</span>
+            <p>Your <strong>all-time top 10</strong>, ranked and ready the next time someone asks?</p>
+        </div>
+    </div>
+    <p class="tease-answer">Cinemaland remembers, <span class="lp-gradient">so you don't have to.</span></p>
+</section>
+
+<!-- ===== LOCKED PREVIEW ===== -->
+<section class="lp-section" id="inside">
+    <span class="lp-eyebrow">Behind the curtain</span>
+    <h2 class="lp-title">This is what's waiting inside</h2>
+
+    <div class="preview">
+        <div class="preview-bar">
+            <span class="b r"></span><span class="b y"></span><span class="b g"></span>
+            <span class="preview-url"><i class="fas fa-lock"></i> cinemaland · My Collection</span>
+        </div>
+        <div class="preview-body">
+            <div class="preview-head">
+                <div>
+                    <h3>My Collection</h3>
+                    <span class="preview-meta">48 movies · 9 categories · 112 actors</span>
+                </div>
+                <span class="preview-chip"><i class="fas fa-star"></i> Top rated</span>
+            </div>
+            <div class="preview-grid">
+                <div class="mini p3"><span>Neon Harbor</span><em>★ 9.1</em></div>
+                <div class="mini p7"><span>Velvet Hour</span><em>★ 8.7</em></div>
+                <div class="mini p1"><span>Midnight Orbit</span><em>★ 8.9</em></div>
+                <div class="mini p5"><span>Salt &amp; Smoke</span><em>★ 8.2</em></div>
+                <div class="mini p8"><span>Echo Park</span><em>★ 7.9</em></div>
+                <div class="mini p2"><span>The Last Reel</span><em>★ 9.4</em></div>
+                <div class="mini p6"><span>Quiet Thunder</span><em>★ 8.0</em></div>
+                <div class="mini p4"><span>Paper Kings</span><em>★ 8.5</em></div>
+                <div class="mini p7"><span>Ashfall</span><em>★ 7.6</em></div>
+                <div class="mini p3"><span>Wild Cards</span><em>★ 8.3</em></div>
+                <div class="mini p1"><span>Golden Hour</span><em>★ 9.0</em></div>
+                <div class="mini p5"><span>Hollow Sun</span><em>★ 7.8</em></div>
+            </div>
+        </div>
+        <div class="preview-lock">
+            <span class="lock-icon"><i class="fas fa-lock"></i></span>
+            <h3>This shelf could be yours.</h3>
+            <p>Sign up to unlock your own private collection.</p>
+            <a class="lp-btn lp-btn-lg" th:href="@{/signup}"><i class="fas fa-key"></i> Unlock my cinema</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== WHAT YOU GET ===== -->
+<section class="lp-section" id="features">
+    <span class="lp-eyebrow">Your cinema includes</span>
+    <h2 class="lp-title">Everything a movie lover needs</h2>
+
+    <div class="lp-grid">
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-film"></i></span>
+            <h3>Your own film library</h3>
+            <p>Title, director, genre, rating, synopsis. Every detail of every movie you love.</p>
+        </article>
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-image"></i></span>
+            <h3>A wall of posters</h3>
+            <p>Upload posters and watch your collection turn into a real cinema lobby.</p>
+        </article>
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-masks-theater"></i></span>
+            <h3>Actors &amp; cast</h3>
+            <p>Never lose a name again. See every actor and the movies they starred in.</p>
+        </article>
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-layer-group"></i></span>
+            <h3>Your categories</h3>
+            <p>"Rainy Sunday", "Cry-worthy", "Must rewatch". Sort your films your way.</p>
+        </article>
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-magnifying-glass"></i></span>
+            <h3>Top rated &amp; search</h3>
+            <p>Your best films at a glance, and any title found in a second.</p>
+        </article>
+        <article class="lp-feature">
+            <span class="lp-icon"><i class="fas fa-user-secret"></i></span>
+            <h3>Totally private</h3>
+            <p>Your cinema, your rules. Nobody else can see or touch your collection.</p>
+        </article>
+    </div>
+</section>
+
+<!-- ===== CREATOR ===== -->
+<section class="lp-section" id="about">
+    <div class="lp-about">
+        <div class="lp-avatar" aria-hidden="true">AJ</div>
+        <div>
+            <span class="lp-eyebrow">A film by AJ</span>
+            <h2 class="lp-title">Hi, I'm Armin Jazdanpanahi 👋</h2>
+            <p>
+                I built Cinemaland because I love movies and kept forgetting the ones that mattered.
+                So I made a place to keep them, and now I'm opening the doors for you too.
+                Come in, grab a seat and build a collection you'll be proud of.
+            </p>
+            <a class="lp-btn-ghost" href="https://github.com/Siryazdan" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> See my other work
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TICKET ===== -->
+<section class="lp-section final">
+    <h2 class="lp-title center">Your ticket is ready.</h2>
+    <p class="lp-section-sub center">All you have to do is take it.</p>
+
+    <a class="big-ticket" th:href="@{/signup}" aria-label="Sign up for free">
+        <div class="bt-main">
+            <span class="bt-label">Admit one</span>
+            <span class="bt-title">CINEMALAND</span>
+            <div class="bt-info">
+                <div><small>Seat</small><b>Yours</b></div>
+                <div><small>Screen</small><b>Private</b></div>
+                <div><small>Showtime</small><b>Right now</b></div>
+                <div><small>Price</small><b>Free</b></div>
+            </div>
+        </div>
+        <div class="bt-stub">
+            <span class="bt-tear">Tear here to enter</span>
+            <span class="bt-go">Sign up <i class="fas fa-arrow-right"></i></span>
+        </div>
+    </a>
+</section>
+
+<footer class="lp-footer">
+    <div class="auth-logo lp-brand lp-brand-sm">
+        <span class="logo-icon"><i class="fas fa-film"></i></span>
+        <span>
+            <span class="main-text">CINEMALAND</span>
+            <span class="signature"><span class="credit">a film by</span><span class="aj">AJ</span></span>
+        </span>
+    </div>
+    <p>&copy; <span th:text="${#dates.year(#dates.createNow())}">2026</span> Armin Jazdanpanahi. All rights reserved.</p>
+    <a href="https://github.com/Siryazdan" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+</footer>
+
+<!-- ===== LOGIN POP-UP (opens via #login, or automatically after an error / logout) ===== -->
+<div class="login-modal" id="login"
+     th:classappend="${param.error != null or param.logout != null} ? 'is-open'">
+    <a class="login-backdrop" href="#" aria-label="Close"></a>
+    <div class="auth-card login-card" role="dialog" aria-labelledby="login-title">
+        <a class="login-close" href="#" aria-label="Close"><i class="fas fa-xmark"></i></a>
+        <h2 id="login-title">Welcome back</h2>
+        <p class="lead">Your seat is still warm. Log in to your cinema.</p>
 
         <div class="alert alert-error" th:if="${param.error}" role="alert">
             <i class="fas fa-circle-exclamation"></i>
@@ -72,11 +308,9 @@
                 <label for="email">Email</label>
                 <div class="input-wrap">
                     <i class="fas fa-envelope"></i>
-                    <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com"
-                           required autofocus>
+                    <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required>
                 </div>
             </div>
-
             <div class="field">
                 <label for="password">Password</label>
                 <div class="input-wrap">
@@ -85,125 +319,43 @@
                            placeholder="Your password" required>
                 </div>
             </div>
-
             <button type="submit" class="btn-primary">Log in</button>
         </form>
 
-        <p class="switch">New to Cinemaland? <a th:href="@{/signup}">Create an account</a></p>
+        <p class="switch">No ticket yet? <a th:href="@{/signup}">Get one for free</a></p>
     </div>
-</section>
+</div>
 
-<div class="lp-strip" aria-hidden="true"></div>
-
-<!-- Features -->
-<section class="lp-section" id="features">
-    <span class="lp-eyebrow">Features</span>
-    <h2 class="lp-title">Everything your movie collection needs</h2>
-    <p class="lp-section-sub">Built for movie lovers who want their favorite films organized, searchable and all in one place.</p>
-
-    <div class="lp-grid">
-        <article class="lp-feature">
-            <span class="lp-icon"><i class="fas fa-film"></i></span>
-            <h3>Your movie library</h3>
-            <p>Add movies with title, director, genre, rating and synopsis, then edit or remove them at any time.</p>
-        </article>
-        <article class="lp-feature">
-            <span class="lp-icon"><i class="fas fa-layer-group"></i></span>
-            <h3>Categories</h3>
-            <p>Group your films into your own categories, such as Action, Drama or Weekend favorites, and browse them easily.</p>
-        </article>
-        <article class="lp-feature">
-            <span class="lp-icon"><i class="fas fa-user-astronaut"></i></span>
-            <h3>Actors &amp; cast</h3>
-            <p>Keep track of the actors you love and see which movies they appear in, each with their own detail page.</p>
-        </article>
-        <article class="lp-feature">
-            <span class="lp-icon"><i class="fas fa-image"></i></span>
-            <h3>Poster uploads</h3>
-            <p>Upload a poster for every movie so your collection looks like a real cinema wall.</p>
-        </article>
-        <article class="lp-feature">
-            <span class="lp-icon"><i class="fas fa-star"></i></span>
-            <h3>Top rated &amp; search</h3>
-            <p>See your highest-rated movies at a glance and find any title in seconds with search.</p>
-        </article>
-        <article class="lp-feature">
-            <span class="lp-icon"><i class="fas fa-shield-halved"></i></span>
-            <h3>Private &amp; secure</h3>
-            <p>Your collection belongs only to you. Nobody else can see or change your entries, and passwords are stored safely encrypted.</p>
-        </article>
-    </div>
-</section>
-
-<!-- How it works -->
-<section class="lp-section" id="how">
-    <span class="lp-eyebrow">How it works</span>
-    <h2 class="lp-title">Start your collection in three steps</h2>
-
-    <ol class="lp-steps">
-        <li>
-            <span class="lp-step-no">1</span>
-            <h3>Create an account</h3>
-            <p>Sign up with your email in a few seconds. It's free.</p>
-        </li>
-        <li>
-            <span class="lp-step-no">2</span>
-            <h3>Add your movies</h3>
-            <p>Add films, categories and actors in your personal admin area.</p>
-        </li>
-        <li>
-            <span class="lp-step-no">3</span>
-            <h3>Enjoy your cinema</h3>
-            <p>Browse, search and rediscover your collection whenever you like.</p>
-        </li>
-    </ol>
-</section>
-
-<!-- About the creator -->
-<section class="lp-section" id="about">
-    <div class="lp-about">
-        <div class="lp-avatar" aria-hidden="true">AJ</div>
-        <div>
-            <span class="lp-eyebrow">About the creator</span>
-            <h2 class="lp-title">Made by Armin Jazdanpanahi</h2>
-            <p>
-                Hi, I'm Armin. I built Cinemaland as a full-stack project because I love movies and wanted
-                a simple, good-looking place to keep my own collection. The backend is built with
-                <strong>Java&nbsp;21 and Spring Boot</strong>, the frontend with <strong>Vue&nbsp;3</strong>,
-                and the data lives in <strong>MySQL</strong>.
-            </p>
-            <div class="lp-tags">
-                <span>Java 21</span><span>Spring Boot</span><span>Spring Security</span>
-                <span>Vue 3</span><span>MySQL</span><span>Thymeleaf</span>
-            </div>
-            <a class="lp-btn-ghost" href="https://github.com/Siryazdan" target="_blank" rel="noopener">
-                <i class="fab fa-github"></i> View my GitHub
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Final call to action -->
-<section class="lp-final">
-    <h2>Ready to build your own cinema?</h2>
-    <p>Join Cinemaland and start your movie collection today.</p>
-    <div class="lp-cta">
-        <a class="lp-btn lp-btn-lg" th:href="@{/signup}">Get started</a>
-        <a class="lp-btn-ghost lp-btn-lg" href="#login">I already have an account</a>
-    </div>
-</section>
-
-<footer class="lp-footer">
-    <div class="auth-logo lp-brand lp-brand-sm">
-        <span class="logo-icon"><i class="fas fa-film"></i></span>
-        <span>
-            <span class="main-text">CINEMALAND</span>
-            <span class="signature"><span class="credit">a film by</span><span class="aj">AJ</span></span>
-        </span>
-    </div>
-    <p>&copy; <span th:text="${#dates.year(#dates.createNow())}">2026</span> Armin Jazdanpanahi. All rights reserved.</p>
-    <a href="https://github.com/Siryazdan" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
-</footer>
-
+<noscript><style>.login-modal:target { display: flex; }</style></noscript>
+<script>
+    // Login pop-up: open from any "#login" link, close with X, backdrop or Escape
+    (function () {
+        var modal = document.getElementById('login');
+        function open() {
+            modal.classList.add('is-open');
+            document.body.classList.add('modal-open');
+            setTimeout(function () { document.getElementById('email').focus(); }, 60);
+        }
+        function close() {
+            modal.classList.remove('is-open');
+            document.body.classList.remove('modal-open');
+        }
+        document.querySelectorAll('a[href="#login"]').forEach(function (a) {
+            a.addEventListener('click', function (e) { e.preventDefault(); open(); });
+        });
+        modal.querySelectorAll('a[href="#"]').forEach(function (a) {
+            a.addEventListener('click', function (e) { e.preventDefault(); close(); });
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') close();
+        });
+        if (location.hash === '#login') {
+            history.replaceState(null, '', location.pathname + location.search);
+            open();
+        } else if (modal.classList.contains('is-open')) {
+            open();
+        }
+    })();
+</script>
 </body>
 </html>
